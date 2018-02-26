@@ -3,7 +3,7 @@ import sys
 import os
 
 from direct.showbase.ShowBase import ShowBase
-import blenderpanda
+#import blenderpanda
 
 from math import pi, sin, cos
 import pprint
@@ -104,7 +104,7 @@ class SIMGame(ShowBase):
 
     def __init__(self):
         super().__init__()
-        blenderpanda.init(self)
+        #blenderpanda.init(self)
         self.accept('escape', sys.exit)
 
         self.addScene(GameTest())
@@ -119,7 +119,7 @@ class SIMGame(ShowBase):
         self.load_registered_scenes()
         # setup Horizons
         self.horizon = 'skysphere'
-        self.addHorizon(Background('skysphere', filename='skysphere.bam'))
+        self.addHorizon(Background('skysphere', filename='skysphere_mk2.egg'))
         self.addHorizon(Background('skybox', filename='skybox_1024'))
         self.load_horizon(self.horizon)
         self.setControls()
