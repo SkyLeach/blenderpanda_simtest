@@ -1,0 +1,565 @@
+<Comment> {
+  "egg-texture-cards -o surfdog.egg -fps 15 './tex/Background (110ms).png' './tex/Frame 2 (110ms) (combine).png' './tex/Frame 3 (110ms) (combine).png' './tex/Frame 4 (110ms) (combine).png' './tex/Frame 5 (110ms) (combine).png' './tex/Frame 6 (110ms) (combine).png' './tex/Frame 7 (110ms) (combine).png' './tex/Frame 8 (110ms) (combine).png' './tex/Frame 9 (110ms) (combine).png' './tex/Frame 10 (110ms) (combine).png' './tex/Frame 11 (110ms) (combine).png' './tex/Frame 12 (110ms) (combine).png' './tex/Frame 13 (110ms) (combine).png' './tex/Frame 14 (110ms) (combine).png' './tex/Frame 15 (110ms) (combine).png' './tex/Frame 16 (110ms) (combine).png' './tex/Frame 17 (110ms) (combine).png' './tex/Frame 18 (110ms) (combine).png' './tex/Frame 19 (110ms) (combine).png' './tex/Frame 20 (110ms) (combine).png' './tex/Frame 21 (110ms) (combine).png' './tex/Frame 22 (110ms) (combine).png' './tex/Frame 23 (110ms) (combine).png' './tex/Frame 24 (110ms) (combine).png' './tex/Frame 25 (110ms) (combine).png' './tex/Frame 26 (110ms) (combine).png' './tex/Frame 27 (110ms) (combine).png' './tex/Frame 28 (110ms) (combine).png' './tex/Frame 29 (110ms) (combine).png' './tex/Frame 30 (110ms) (combine).png' './tex/Frame 31 (110ms) (combine).png' './tex/Frame 32 (110ms) (combine).png' './tex/Frame 33 (110ms) (combine).png' './tex/Frame 34 (110ms) (combine).png' './tex/Frame 35 (110ms) (combine).png' './tex/Frame 36 (110ms) (combine).png' './tex/Frame 37 (110ms) (combine).png' './tex/Frame 38 (110ms) (combine).png' './tex/Frame 39 (110ms) (combine).png' './tex/Frame 40 (110ms) (combine).png' './tex/Frame 41 (110ms) (combine).png' './tex/Frame 42 (110ms) (combine).png' './tex/Frame 43 (110ms) (combine).png' './tex/Frame 44 (110ms) (combine).png' './tex/Frame 45 (110ms) (combine).png' './tex/Frame 46 (110ms) (combine).png' './tex/Frame 47 (110ms) (combine).png' './tex/Frame 48 (110ms) (combine).png' './tex/Frame 49 (110ms) (combine).png' './tex/Frame 50 (110ms) (combine).png' './tex/Frame 51 (110ms) (combine).png' './tex/Frame 52 (110ms) (combine).png' './tex/Frame 53 (110ms) (combine).png' './tex/Frame 54 (110ms) (combine).png'"
+}
+<Texture> "Frame 9 (110ms) (combine)" {
+  "./tex/Frame 9 (110ms) (combine).png"
+}
+<Texture> "Frame 8 (110ms) (combine)" {
+  "./tex/Frame 8 (110ms) (combine).png"
+}
+<Texture> "Frame 7 (110ms) (combine)" {
+  "./tex/Frame 7 (110ms) (combine).png"
+}
+<Texture> "Frame 6 (110ms) (combine)" {
+  "./tex/Frame 6 (110ms) (combine).png"
+}
+<Texture> "Frame 54 (110ms) (combine)" {
+  "./tex/Frame 54 (110ms) (combine).png"
+}
+<Texture> "Frame 53 (110ms) (combine)" {
+  "./tex/Frame 53 (110ms) (combine).png"
+}
+<Texture> "Frame 52 (110ms) (combine)" {
+  "./tex/Frame 52 (110ms) (combine).png"
+}
+<Texture> "Frame 51 (110ms) (combine)" {
+  "./tex/Frame 51 (110ms) (combine).png"
+}
+<Texture> "Frame 50 (110ms) (combine)" {
+  "./tex/Frame 50 (110ms) (combine).png"
+}
+<Texture> "Frame 5 (110ms) (combine)" {
+  "./tex/Frame 5 (110ms) (combine).png"
+}
+<Texture> "Frame 49 (110ms) (combine)" {
+  "./tex/Frame 49 (110ms) (combine).png"
+}
+<Texture> "Frame 48 (110ms) (combine)" {
+  "./tex/Frame 48 (110ms) (combine).png"
+}
+<Texture> "Frame 47 (110ms) (combine)" {
+  "./tex/Frame 47 (110ms) (combine).png"
+}
+<Texture> "Frame 46 (110ms) (combine)" {
+  "./tex/Frame 46 (110ms) (combine).png"
+}
+<Texture> "Frame 45 (110ms) (combine)" {
+  "./tex/Frame 45 (110ms) (combine).png"
+}
+<Texture> "Frame 44 (110ms) (combine)" {
+  "./tex/Frame 44 (110ms) (combine).png"
+}
+<Texture> "Frame 43 (110ms) (combine)" {
+  "./tex/Frame 43 (110ms) (combine).png"
+}
+<Texture> "Frame 42 (110ms) (combine)" {
+  "./tex/Frame 42 (110ms) (combine).png"
+}
+<Texture> "Frame 41 (110ms) (combine)" {
+  "./tex/Frame 41 (110ms) (combine).png"
+}
+<Texture> "Frame 40 (110ms) (combine)" {
+  "./tex/Frame 40 (110ms) (combine).png"
+}
+<Texture> "Frame 4 (110ms) (combine)" {
+  "./tex/Frame 4 (110ms) (combine).png"
+}
+<Texture> "Frame 39 (110ms) (combine)" {
+  "./tex/Frame 39 (110ms) (combine).png"
+}
+<Texture> "Frame 38 (110ms) (combine)" {
+  "./tex/Frame 38 (110ms) (combine).png"
+}
+<Texture> "Frame 37 (110ms) (combine)" {
+  "./tex/Frame 37 (110ms) (combine).png"
+}
+<Texture> "Frame 36 (110ms) (combine)" {
+  "./tex/Frame 36 (110ms) (combine).png"
+}
+<Texture> "Frame 35 (110ms) (combine)" {
+  "./tex/Frame 35 (110ms) (combine).png"
+}
+<Texture> "Frame 34 (110ms) (combine)" {
+  "./tex/Frame 34 (110ms) (combine).png"
+}
+<Texture> "Frame 33 (110ms) (combine)" {
+  "./tex/Frame 33 (110ms) (combine).png"
+}
+<Texture> "Frame 32 (110ms) (combine)" {
+  "./tex/Frame 32 (110ms) (combine).png"
+}
+<Texture> "Frame 31 (110ms) (combine)" {
+  "./tex/Frame 31 (110ms) (combine).png"
+}
+<Texture> "Frame 30 (110ms) (combine)" {
+  "./tex/Frame 30 (110ms) (combine).png"
+}
+<Texture> "Frame 3 (110ms) (combine)" {
+  "./tex/Frame 3 (110ms) (combine).png"
+}
+<Texture> "Frame 29 (110ms) (combine)" {
+  "./tex/Frame 29 (110ms) (combine).png"
+}
+<Texture> "Frame 28 (110ms) (combine)" {
+  "./tex/Frame 28 (110ms) (combine).png"
+}
+<Texture> "Frame 27 (110ms) (combine)" {
+  "./tex/Frame 27 (110ms) (combine).png"
+}
+<Texture> "Frame 26 (110ms) (combine)" {
+  "./tex/Frame 26 (110ms) (combine).png"
+}
+<Texture> "Frame 25 (110ms) (combine)" {
+  "./tex/Frame 25 (110ms) (combine).png"
+}
+<Texture> "Frame 24 (110ms) (combine)" {
+  "./tex/Frame 24 (110ms) (combine).png"
+}
+<Texture> "Frame 23 (110ms) (combine)" {
+  "./tex/Frame 23 (110ms) (combine).png"
+}
+<Texture> "Frame 22 (110ms) (combine)" {
+  "./tex/Frame 22 (110ms) (combine).png"
+}
+<Texture> "Frame 21 (110ms) (combine)" {
+  "./tex/Frame 21 (110ms) (combine).png"
+}
+<Texture> "Frame 20 (110ms) (combine)" {
+  "./tex/Frame 20 (110ms) (combine).png"
+}
+<Texture> "Frame 2 (110ms) (combine)" {
+  "./tex/Frame 2 (110ms) (combine).png"
+}
+<Texture> "Frame 19 (110ms) (combine)" {
+  "./tex/Frame 19 (110ms) (combine).png"
+}
+<Texture> "Frame 18 (110ms) (combine)" {
+  "./tex/Frame 18 (110ms) (combine).png"
+}
+<Texture> "Frame 17 (110ms) (combine)" {
+  "./tex/Frame 17 (110ms) (combine).png"
+}
+<Texture> "Frame 16 (110ms) (combine)" {
+  "./tex/Frame 16 (110ms) (combine).png"
+}
+<Texture> "Frame 15 (110ms) (combine)" {
+  "./tex/Frame 15 (110ms) (combine).png"
+}
+<Texture> "Frame 14 (110ms) (combine)" {
+  "./tex/Frame 14 (110ms) (combine).png"
+}
+<Texture> "Frame 13 (110ms) (combine)" {
+  "./tex/Frame 13 (110ms) (combine).png"
+}
+<Texture> "Frame 12 (110ms) (combine)" {
+  "./tex/Frame 12 (110ms) (combine).png"
+}
+<Texture> "Frame 11 (110ms) (combine)" {
+  "./tex/Frame 11 (110ms) (combine).png"
+}
+<Texture> "Frame 10 (110ms) (combine)" {
+  "./tex/Frame 10 (110ms) (combine).png"
+}
+<Texture> "Background (110ms)" {
+  "./tex/Background (110ms).png"
+}
+<Group> {
+  <Switch> { 1 }
+  <Scalar> fps { 15 }
+  <VertexPool> vpool {
+    <Vertex> 0 {
+      -0.5 0.5 0
+      <UV> { 0 1 }
+    }
+    <Vertex> 1 {
+      -0.5 -0.5 0
+      <UV> { 0 0 }
+    }
+    <Vertex> 2 {
+      0.5 -0.5 0
+      <UV> { 1 0 }
+    }
+    <Vertex> 3 {
+      0.5 0.5 0
+      <UV> { 1 1 }
+    }
+  }
+  <Group> "Background (110ms)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Background (110ms)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 2 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 2 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 3 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 3 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 4 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 4 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 5 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 5 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 6 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 6 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 7 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 7 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 8 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 8 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 9 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 9 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 10 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 10 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 11 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 11 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 12 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 12 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 13 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 13 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 14 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 14 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 15 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 15 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 16 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 16 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 17 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 17 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 18 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 18 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 19 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 19 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 20 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 20 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 21 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 21 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 22 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 22 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 23 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 23 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 24 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 24 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 25 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 25 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 26 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 26 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 27 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 27 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 28 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 28 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 29 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 29 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 30 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 30 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 31 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 31 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 32 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 32 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 33 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 33 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 34 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 34 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 35 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 35 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 36 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 36 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 37 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 37 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 38 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 38 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 39 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 39 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 40 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 40 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 41 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 41 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 42 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 42 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 43 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 43 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 44 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 44 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 45 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 45 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 46 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 46 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 47 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 47 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 48 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 48 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 49 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 49 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 50 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 50 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 51 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 51 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 52 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 52 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 53 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 53 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+  <Group> "Frame 54 (110ms) (combine)" {
+    <Polygon> {
+      <RGBA> { 1 1 1 1 }
+      <TRef> { "Frame 54 (110ms) (combine)" }
+      <VertexRef> { 0 1 2 3 <Ref> { vpool } }
+    }
+  }
+}

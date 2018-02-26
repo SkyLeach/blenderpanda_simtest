@@ -1,0 +1,5 @@
+Library/
+simgame/Library/
+simgame/blender_scenes/
+simgame/__pycache__/
+**/*.pyc

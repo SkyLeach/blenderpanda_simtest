@@ -1,0 +1,5 @@
+numpy==1.14.1
+panda3d
+pudb==2017.1.4
+Pygments==2.2.0
+urwid==2.0.1
