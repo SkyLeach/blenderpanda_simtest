@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 import sys
 import os
-
-from direct.showbase.ShowBase import ShowBase
-#import blenderpanda
-
 from math import pi, sin, cos
 import pprint
 import logging
@@ -12,7 +8,36 @@ logger = logging.getLogger(__name__)
 import traceback
 
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import Point3, PointLight, VBase4
+from panda3d.core import *
+import blenderpanda
+
+from simpleconsole import ConsoleWindow
+
+load_prc_file_data("", """
+    notify-level-lui info
+    text-minfilter linear
+    text-magfilter linear
+    text-pixels-per-unit 32
+    sync-video #f
+    textures-power-2 none
+    show-frame-rate-meter #t
+    win-size 780 630
+    window-title LUI Demo
+    win-fixed-size #f
+""")
+
+# test panda_LUI
+# -- fix LUI --from Builtin.LUISkin import LUIDefaultSkin
+# -- fix LUI --from Builtin.LUIFrame import LUIFrame
+# -- fix LUI --from Builtin.LUILabel import LUILabel
+# -- fix LUI --from Builtin.LUIInputField import LUIInputField
+# -- fix LUI --from Builtin.LUIFormattedLabel import LUIFormattedLabel
+# -- fix LUI --from Builtin.LUIScrollableRegion import LUIScrollableRegion
+# -- fix LUI --from Builtin.LUIObject import LUIObject
+# -- fix LUI --from Builtin.LUIRegion import LUIRegion
+# -- fix LUI --from Builtin.LUIInputHandler import LUIInputHandler
+# -- fix LUI --from Builtin.LUIVerticalLayout import LUIVerticalLayout
+# -- fix LUI --from Skins.Metro.LUIMetroSkin import LUIMetroSkin
 
 from scene import * # SceneInfo, Scene, SceneObject
 from testscene import GameTest
@@ -103,8 +128,9 @@ class SIMGame(ShowBase):
             logger.warn('No horizon with name "%s" registered.' % (name))
 
     def __init__(self):
+        load_prc_file_data('', 'textures-power-2 none')
         super().__init__()
-        #blenderpanda.init(self)
+        blenderpanda.init(self)
         self.accept('escape', sys.exit)
 
         self.addScene(GameTest())
@@ -123,6 +149,8 @@ class SIMGame(ShowBase):
         self.addHorizon(Background('skybox', filename='skybox_1024'))
         self.load_horizon(self.horizon)
         self.setControls()
+
+        self.console = ConsoleWindow(self)
         #big mesh test with point light
         # light
 #         plight = PointLight('plight')
@@ -180,6 +208,73 @@ class SIMGame(ShowBase):
 #            INPUT_CONSOLE|INPUT_GUI|OUTPUT_PYTHON,
 #            locals()
 #        )
+
+        # ----- LUI test code. -----
+        #base.win.set_clear_color(Vec4(0.1, 0.0, 0.0, 1))
+# -- fix LUI --        self.skin = LUIDefaultSkin()
+# -- fix LUI --        self.skin.load()
+# -- fix LUI --
+# -- fix LUI --        # Initialize LUI
+# -- fix LUI --        self.region = LUIRegion.make("LUI", base.win)
+# -- fix LUI --        self.handler = LUIInputHandler()
+# -- fix LUI --        base.mouseWatcher.attach_new_node(self.handler)
+# -- fix LUI --        self.region.set_input_handler(self.handler)
+# -- fix LUI --
+# -- fix LUI --        # Title
+# -- fix LUI --        title_label = LUILabel(parent=self.region.root,
+# -- fix LUI --                text="LUI Console Example",
+# -- fix LUI --                font_size=40, font="header", pos=(25, 17))
+# -- fix LUI --
+# -- fix LUI --        # Container
+# -- fix LUI --        container = LUIFrame(parent = self.region.root, width=700, height=500,
+# -- fix LUI --            style=LUIFrame.FS_sunken, margin=30, top=50)
+# -- fix LUI --
+# -- fix LUI --        self.text_container = LUIScrollableRegion(parent=container, width=675,
+# -- fix LUI --                height=440, padding=0)
+# -- fix LUI --
+# -- fix LUI --        #base.win.set_clear_color(Vec4(0.1, 0.1, 0.1, 1.0))
+# -- fix LUI --        self.layout = LUIVerticalLayout(parent=self.text_container.content_node)
+# -- fix LUI --
+# -- fix LUI --        # Create the input box
+# -- fix LUI --        self.input_field = LUIInputField(parent=container, bottom=0, left=0, width="100%")
+# -- fix LUI --        self.input_field.bind("enter", self.send_command)
+# -- fix LUI --        self.input_field.request_focus()
+# -- fix LUI --
+# -- fix LUI --        # Add some initial commands
+# -- fix LUI --        for demo_command in ["Hello world!",
+# -- fix LUI --                "This is a simple console",
+# -- fix LUI --                "You can type commands like this:",
+# -- fix LUI --                "/test"]:
+# -- fix LUI --            self.input_field.trigger_event("enter", demo_command)
+
+    def send_command(self, event):
+        """ Called when the user presses enter in the input field, submits the
+        command and prints something on the console """
+        label = LUIFormattedLabel()
+        color = (0.9, 0.9, 0.9, 1.0)
+        if event.message.startswith("/"):
+            color = (0.35, 0.65, 0.24, 1.0)
+        label.add(text=">>>  ", color=(0.35, 0.65, 0.24, 1.0))
+        label.add(text=event.message, color=color)
+        self.layout.add(label)
+
+        result = LUIFormattedLabel()
+        if sys.version_info[0]==3 and sys.version_info[1]>2:
+            import codecs
+            result.add("Your command in rot13: " + codecs.encode(event.message, "rot13"), color=(0.4, 0.4, 0.4, 1.0))
+        else:
+            result.add("Your command in rot13: " + event.message.encode("rot13"), color=(0.4, 0.4, 0.4, 1.0))
+        self.layout.add(result)
+        self.input_field.clear()
+
+        self.text_container.scroll_to_bottom()
+
+
+    def toggleConsole(self):
+        #unset all controls but console
+        self.ignoreAll()
+        base.camLens.setFocalLength(5)
+        self.console.toggleConsole()
 
     def setControls(self):
         for winCtrl in self.winControls:

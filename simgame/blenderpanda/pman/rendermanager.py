@@ -50,11 +50,11 @@ class BasicRenderManager:
         self.base = base
         self.base.render.set_shader_auto()
 
-        manager = FilterManager(base.win, base.cam)
-        self.post_tex = p3d.Texture()
-        post_quad = manager.renderSceneInto(colortex=self.post_tex)
-        post_quad.set_shader(p3d.Shader.make(p3d.Shader.SL_GLSL, _SRGB_VERT, _SRGB_FRAG))
-        post_quad.set_shader_input('tex', self.post_tex)
+# -sRGB OFF-        manager = FilterManager(base.win, base.cam)
+# -sRGB OFF-        self.post_tex = p3d.Texture()
+# -sRGB OFF-        post_quad = manager.renderSceneInto(colortex=self.post_tex)
+# -sRGB OFF-        post_quad.set_shader(p3d.Shader.make(p3d.Shader.SL_GLSL, _SRGB_VERT, _SRGB_FRAG))
+# -sRGB OFF-        post_quad.set_shader_input('tex', self.post_tex)
 
 
 def create_render_manager(base, config=None):
