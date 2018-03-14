@@ -21,8 +21,8 @@ load_prc_file_data("", """
     sync-video #f
     textures-power-2 none
     show-frame-rate-meter #t
-    win-size 780 630
-    window-title LUI Demo
+    win-size 1920 1080
+    window-title S.I.M.
     win-fixed-size #f
 """)
 
@@ -53,8 +53,8 @@ class SIMGame(ShowBase):
     current_scene = None
     # The scene to use on startup
     start_scene   = 'gametest'
-    surfdog       = None
-    cannon        = None
+# - surfdog -     surfdog       = None
+# -cannon-     cannon        = None
     console       = None
 
     horizon       = None #current active horizon name
@@ -74,6 +74,21 @@ class SIMGame(ShowBase):
                 self.current_scene.register_camera(self.camera)
                 # register any tasks in the scene
                 self.current_scene.register_tasks(self.taskMgr)
+            else:
+                scene.hide()
+
+    def set_scene(self, name=None, sceneinfo=None, scene=None):
+        if not scene:
+            try:
+                self.load_scene(name=name, sceneinfo=sceneinfo)
+            except:
+                logger.warn('set_scene: nothing to work on')
+                return False
+        self.current_scene.hide()
+        self.current_scene = scene
+        self.current_scene.show()
+        self.setControls()
+        return True
 
     def load_scene(self, name=None, sceneinfo=None):
         name = name if name else sceneinfo.name
@@ -134,23 +149,26 @@ class SIMGame(ShowBase):
         self.accept('escape', sys.exit)
 
         self.addScene(GameTest())
-        self.addScene(Scene('surfdog', filename='surfdog',
-            scale=[5.0, 0.1, 5.0],
-            position=[-8, 22, -2]
-        ))
-#         self.addScene(Scene('cannon', filename='cannon',
-#             position=[0,22,0],
-#             hpr=[-45,0,0]
-#         ))
+# - surfdog -         self.addScene(Scene('surfdog', filename='surfdog',
+# - surfdog -             scale=[5.0, 0.1, 5.0],
+# - surfdog -             position=[-8, 22, -2]
+# - surfdog -         ))
+# -cannon-         self.addScene(Scene('cannon', filename='cannon',
+# -cannon-             position=[0,22,0],
+# -cannon-             hpr=[-45,0,0]
+# -cannon-         ))
         self.load_registered_scenes()
         # setup Horizons
         self.horizon = 'skysphere'
         self.addHorizon(Background('skysphere', filename='skysphere_mk2.egg'))
         self.addHorizon(Background('skybox', filename='skybox_1024'))
         self.load_horizon(self.horizon)
-        self.setControls()
 
         self.console = ConsoleWindow(self)
+        # explicit first hide
+        self.console.toggleConsole(hide=True)
+
+        self.setControls()
         #big mesh test with point light
         # light
 #         plight = PointLight('plight')
@@ -276,19 +294,34 @@ class SIMGame(ShowBase):
         base.camLens.setFocalLength(5)
         self.console.toggleConsole()
 
-    def setControls(self):
+    def setGlobalControls(self):
+        # self.accept("s", self.swap_horizon)
+        # self.accept("w", self.toggle_sky_wireframe)
+        self.accept( self.console.gui_key, self.console.toggleConsole )
+        # exit game
+        self.accept("escape", sys.exit)
+        # load current scene controls
+
+
+    def setControls(self, console=False):
+        """setControls
+
+        :param scene:
+        Disable global controls, enable scene controls for given scene
+        """
         for winCtrl in self.winControls:
             if winCtrl.win == self.win:
                 self.winControls.remove(winCtrl)
         self.setupWindowControls()
         # swap skybox/skysphere
-        self.accept("s", self.swap_horizon)
-        self.accept("w", self.toggle_sky_wireframe)
-        # exit game
-        self.accept("escape", sys.exit)
-        # load current scene controls
-        for (name,control) in self.current_scene.controlmapIter():
-            self.accept(control.key, control.callback, control.args)
+        if console:
+            self.ignoreAll()
+            self.console.mapControls()
+        else:
+            self.ignoreAll()
+            self.setGlobalControls()
+            for (name,control) in self.current_scene.controlmapIter():
+                self.accept(control.key, control.callback, control.args)
 
     def toggle_sky_wireframe(self):
         """toggle_sky_wireframe

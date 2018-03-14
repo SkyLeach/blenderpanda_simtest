@@ -1,1 +1,1 @@
-""" Core game module for S.I.M. ""
+""" Core game module for S.I.M. """

@@ -46,7 +46,7 @@ class GameTest(Scene):
             'du.turn' : ControlMap('du.turn', "arrow_down-up",
                 self.adjust_turning, args=[0.0, 1.0]),
         }
-        super().__init__('gametest', filename='GameTest.bam',
+        super().__init__('gametest', filename='corvette.bam',
             controls=list(self.default_controls.values()))
 
     def adjust_turning(self, heading, pitch):
