@@ -9,6 +9,7 @@ import re
 import string
 import pprint
 
+from completer import completePython
 from panda3d.core import load_prc_file_data
 from panda3d.core import TextNode
 from panda3d.core import Vec3
@@ -74,6 +75,10 @@ INPUT_GUI = 1
 INPUT_CONSOLE = 2
 OUTPUT_PYTHON = 3
 
+CONSOLE_MESSAGE = ''' --- Game Debug Interface ---
+root game object: gameroot
+--------------------------'''
+
 class ConsoleOutput(DirectScrolledList):
     # list of dslitems that are also commands
     _command_history = []
@@ -111,7 +116,7 @@ class ConsoleWindow(DirectObject.DirectObject):
     linelength       = int((h_size/scale - 5) / fontWidth)
     textBuffer       = list()
     MAX_BUFFER_LINES = 5000
-    commandPos       = -1
+    commandPos       = 0
     _iconsole        = None
     _commandBuffer   = ''
     logger.debug("max number of characters on a length:", linelength)
@@ -123,6 +128,16 @@ class ConsoleWindow(DirectObject.DirectObject):
     maxCommandHistory = 10000
     textBufferPos     = -1
     def __init__(self, parent):
+        if not logger.isEnabledFor(logging.DEBUG):
+            global CONSOLE_MESSAGE
+            CONSOLE_MESSAGE = '''
+----------------- Ship's Interface version 3.0.9_749 -------------------
+Direct Ship Interface Enabled.
+Please use caution.  Irresponsible use of this console may result in the ship's AI refusing access to this interface.
+
+type 'help' for basic commands.
+-------------------------------------------------------------------------'''
+
         #change up from parent/IC
         self.parent = parent
         localenv = globals()
@@ -187,6 +202,7 @@ class ConsoleWindow(DirectObject.DirectObject):
                 entryFont   = fixedWidthFont)
 
         #self.console_output = ConsoleOutput(testme=True)
+        self.echo(CONSOLE_MESSAGE)
 
     def windowEvent(self, window):
         """
@@ -216,7 +232,9 @@ class ConsoleWindow(DirectObject.DirectObject):
         self.focus()
         # add text entered to user command list & remove oldest entry
         self.commandList.append(cmdtext)
-        self.commandPos=len(self.commandList)-1
+        self.commandPos+=1
+        self._commandBuffer = ''
+        logger.debug('CP {}'.format(self.commandPos))
         # push to interp
         for text, pre, color in self._iconsole.push(cmdtext):
             self.echo( text, pre, color )
@@ -233,12 +251,12 @@ class ConsoleWindow(DirectObject.DirectObject):
             self.accept( 'page_down'           , self.scroll          , [5]  )
             self.accept( 'page_down-repeat'    , self.scroll          , [5]  )
             self.accept( 'window-event'        , self.windowEvent            )
-            self.accept( 'arrow_up'            , self.scrollCmd       , [ 1] )
-            self.accept( 'arrow_down'          , self.scrollCmd       , [-1] )
-            self.accept(self.gui_key          , self.toggleConsole          )
+            self.accept( 'arrow_up'            , self.scrollCmd       , [-1] )
+            self.accept( 'arrow_down'          , self.scrollCmd       , [1]  )
+            self.accept(self.gui_key          , self.toggleConsole           )
             self.accept( 'escape'              , self.toggleConsole          )
-            self.accept(self.autocomplete_key , self.autocomplete           )
-            self.accept(self.autohelp_key     , self.autohelp               )
+            self.accept(self.autocomplete_key , self.autocomplete            )
+            self.accept(self.autohelp_key     , self.autohelp                )
 
             # accept v, c and x, where c & x copy's the whole console text
             #messenger.toggleVerbose()
@@ -279,21 +297,39 @@ class ConsoleWindow(DirectObject.DirectObject):
             # no... no... I no think so
             return
         self.textBufferPos = newpos
-        self.updateConsoleLines()
+        self.redrawConsole()
 
-    def updateConsoleLines(self):
-        for lineno, (text,color) in \
-                enumerate(self.textBuffer[::self.textBufferPos]):
-            self.consoleOutputList[lineno].setText(text)
-            self.consoleOutputList[lineno]['fg']=color
+    def redrawConsole(self):
+        windowstart = max(self.textBufferPos-len(self._visibleLines)+1,
+                0)
+        windowend = min(len(self._visibleLines)+windowstart,
+                        len(self.textBuffer))
+
+        logger.debug('windowS: {} WindowE: {}'.format(windowstart, windowend))
+        for lineNumber, (lineText, color) in \
+                enumerate(self.textBuffer[
+                    windowstart:
+                    windowend]):
+            logger.debug("LN {}, LEN {}".format(
+                    lineNumber,
+                    len(self.textBuffer),
+                ))
+            self._visibleLines[lineNumber].setText(lineText)
+            self._visibleLines[lineNumber]['fg'] = color
+
 
     def scrollCmd(self, step):
         if not self.commandList: #0 or null - nothing to scroll
             return
         # should we update a temp buffer?
-        if self.commandPos == len(self.commandList)-1 and\
-                self.consoleEntry.get() != self.commandList[self.commandPos]:
-            self._commandBuffer = self.consoleEntry.get()
+        if self.commandPos == len(self.commandList):
+            if step > 0:
+                self.consoleEntry.set(self._commandBuffer)
+                return
+            else:
+                tmp = self.consoleEntry.get()
+                if self.commandList[-1] != tmp:
+                    self._commandBuffer = tmp
         self.commandPos += step
         if self.commandPos >= len(self.commandList):
             self.commandPos = len(self.commandList)-1
@@ -312,10 +348,10 @@ class ConsoleWindow(DirectObject.DirectObject):
     def autocomplete(self):
         currentText = self.consoleEntry.get()
         currentPos = self.consoleEntry.guiItem.getCursorPosition()
-        newText = self.parent.autocomplete(currentText, currentPos )
-        if newText != currentText:
-            self.consoleEntry.set(newText )
-            self.consoleEntry.setCursorPosition(len(newText) )
+        newText = self._iconsole.autocomplete(currentText, currentPos)
+        if newText[-1] and newText[-1] != currentText:
+            self.consoleEntry.set(newText[-1])
+            self.consoleEntry.setCursorPosition(len(newText))
 
     def autohelp(self):
         currentText = self.consoleEntry.get()
@@ -384,35 +420,7 @@ class ConsoleWindow(DirectObject.DirectObject):
             else:
                 self.textBufferPos+=1
 
-        # Add a new line, shift the list up
-        windowstart = max(self.textBufferPos-len(self._visibleLines),
-                0)
-        windowend = min(len(self._visibleLines)+windowstart,
-                        len(self.textBuffer))
-
-        logger.debug('windowS: {} WindowE: {}'.format(windowstart, windowend))
-        for lineNumber, (lineText, color) in \
-                enumerate(self.textBuffer[
-                    windowstart:
-                    windowend]):
-            logger.debug("LN {}, LEN {}".format(
-                    lineNumber,
-                    len(self.textBuffer),
-                ))
-            self._visibleLines[lineNumber].setText(lineText)
-            self._visibleLines[lineNumber]['fg'] = color
-
-#         for lineNumber in range(self.numlines):
-#             offset = lineNumber + self.textBufferPos
-#             logger.debug("LN {}, OFF {}, LEN {}".format(
-#                     lineNumber,
-#                     offset,
-#                     len(self.textBuffer),
-#                 ))
-#             lineText, color = self.textBuffer[offset] \
-#                     if offset < len(self.textBuffer) else ('',color)
-#             self._visibleLines[lineNumber].setText(lineText)
-#             self._visibleLines[lineNumber]['fg'] = color
+        self.redrawConsole()
 
 
 class OutputFilter:

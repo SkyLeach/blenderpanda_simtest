@@ -7,9 +7,9 @@ from direct.actor.Actor import Actor
 from direct.interval.IntervalGlobal import Sequence
 
 # local imp
-from scene import ControlMap, Scene
+from .scene import ControlMap, Scene
 
-class GameTest(Scene):
+class Corvette(Scene):
     default_controls = None
     angle        = 0.0
     pitch        = 0.0
@@ -46,7 +46,7 @@ class GameTest(Scene):
             'du.turn' : ControlMap('du.turn', "arrow_down-up",
                 self.adjust_turning, args=[0.0, 1.0]),
         }
-        super().__init__('gametest', filename='corvette.bam',
+        super().__init__('corvette', filename='corvette.bam',
             controls=list(self.default_controls.values()))
 
     def adjust_turning(self, heading, pitch):

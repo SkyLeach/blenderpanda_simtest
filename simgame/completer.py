@@ -91,7 +91,7 @@ def completePython( parent, pythonText ):
       exec( execCmd )
       environs = { currentEnviron: cv }
 
-  search = re.compile( '^%s.*$' % lastWordSplit[-1] )
+  search = re.compile( '^%s.*$' % re.escape(lastWordSplit[-1]) )
 
   matchList = list()
   for envPre, envObjList in list(environs.items()):

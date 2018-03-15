@@ -39,8 +39,9 @@ load_prc_file_data("", """
 # -- fix LUI --from Builtin.LUIVerticalLayout import LUIVerticalLayout
 # -- fix LUI --from Skins.Metro.LUIMetroSkin import LUIMetroSkin
 
-from scene import * # SceneInfo, Scene, SceneObject
-from testscene import GameTest
+#from scene import * # SceneInfo, Scene, SceneObject
+import scenes
+from scenes.scene import Background
 
 #local imports
 #from InteractiveConsole import pandaConsole, INPUT_CONSOLE, INPUT_GUI, OUTPUT_PYTHON, OUTPUT_IRC
@@ -52,7 +53,7 @@ class SIMGame(ShowBase):
     # The currently selected scene
     current_scene = None
     # The scene to use on startup
-    start_scene   = 'gametest'
+    start_scene   = 'corvette'
 # - surfdog -     surfdog       = None
 # -cannon-     cannon        = None
     console       = None
@@ -75,7 +76,8 @@ class SIMGame(ShowBase):
                 # register any tasks in the scene
                 self.current_scene.register_tasks(self.taskMgr)
             else:
-                scene.hide()
+                self.loaded_obs[name].hide()
+                #scene.hide()
 
     def set_scene(self, name=None, sceneinfo=None, scene=None):
         if not scene:
@@ -148,7 +150,8 @@ class SIMGame(ShowBase):
         blenderpanda.init(self)
         self.accept('escape', sys.exit)
 
-        self.addScene(GameTest())
+        for scene in scenes.available_scenes:
+            self.addScene(scene())
 # - surfdog -         self.addScene(Scene('surfdog', filename='surfdog',
 # - surfdog -             scale=[5.0, 0.1, 5.0],
 # - surfdog -             position=[-8, 22, -2]
