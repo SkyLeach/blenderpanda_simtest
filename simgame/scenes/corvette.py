@@ -1,10 +1,14 @@
 # global env imp
 from math import pi, sin, cos
-
+import logging
+logger = logging.getLogger(__name__)
+import pprint
 # venv lib imports
 from direct.task import Task
 from direct.actor.Actor import Actor
 from direct.interval.IntervalGlobal import Sequence
+#from pandac.PandaModules import Quat
+from panda3d.core import *
 
 # local imp
 from .scene import ControlMap, Scene
@@ -18,6 +22,25 @@ class Corvette(Scene):
     last_time    = 0.0
     cam_speed = 0.5
 
+    ship_anchor_node = None
+
+    major_section_names = [
+        'EmptyTransformSphere',
+        'EmptyHabringClusterSphere',
+        'CenterSpine', # start here for now
+        'Engineering',
+        'Lamp',
+        'Leaf Panel',
+        'Tank',
+        'Shieldcap',
+        ]
+    obj_clusters = [[
+        'EmptyHabringClusterSphere',
+        'Habgear Ring Segments',
+        'HabringPointlight',
+        'HR Segment',
+        'HR Strut',
+    ]]
     @property
     def camera(self): return self._camera
     @camera.setter
@@ -86,6 +109,12 @@ class Corvette(Scene):
         self.cannon.setH(angleDegrees)
         return Task.cont
 
+#     def spinHabringTask(self, task):
+#         angleDegrees = 
+#         angleRadians = 
+#         self.cannon.setH(angleDegrees)
+#         return Task.cont
+
     def register_tasks(self, taskMgr):
         # setup global Tasks
         # Add the spinCameraTask procedure to the task manager
@@ -95,4 +124,41 @@ class Corvette(Scene):
         taskMgr.add(self.update_camera, 'adjust camera', sort = 10)
         pass
 
+    def habring_rotate(self, habringnode, g=0.7):
+        gone_ang_velocity=1.576088025433646
+        gpoint7_ang_velcoity=1.318649849179353
+        #1g in deg/s
+        gone_degpersec = 9.456528152601875
+        rotseconds = 360 / gone_degpersec
+        #q = Quat()
+        #q.reparentTo(habringnode)
+        #q.setHpr(Vec3(360,0,0))
+        #rseq = Sequence(habringnode.quatInterval(rotseconds,q),name='Hab Ring Rotate')
+        rseq = Sequence(habringnode.hprInterval(rotseconds,Vec3(360,0,0)),name='Hab Ring Rotate')
+        rseq.loop()
 
+    def setup(self, rootnode):
+        habring = None
+        for ndex,name in enumerate(self.major_section_names):
+            if not ndex:
+                self.ship_anchor_node = rootnode.find(name)
+                logger.debug('parent is {}:{}'.format(name,self.ship_anchor_node))
+                continue
+            if not self.ship_anchor_node:
+                raise Exception('This shouldn\'t happen.')
+            child = rootnode.find(name)
+            child.wrtReparentTo(self.ship_anchor_node)
+        for cluster in self.obj_clusters:
+            cluster_parent = None
+            for ndex,name in enumerate(cluster):
+                if not ndex:
+                    cluster_parent = self.ship_anchor_node.find(name)
+                    logger.debug(
+                        'cluster parent is {}:{}'.format(name,cluster_parent))
+                    continue
+                child = rootnode.find(name)
+                child.wrtReparentTo(cluster_parent)
+            self.habring_rotate(cluster_parent)
+
+        #now set the parent to scene center
+        self.ship_anchor_node.setPos(Vec3(0,0,0))

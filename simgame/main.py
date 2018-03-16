@@ -68,6 +68,8 @@ class SIMGame(ShowBase):
         for (name,scene) in self.registered_scenes.items():
             self.loaded_obs[name] = \
                 scene.load(self.loader, self.render)
+            #for part in self.loaded_obs[name].:
+            #    logger.debug('Scene obj {} loaded...'.format(part))
             if not self.current_scene and name == self.start_scene:
                 # set current scene handle
                 self.current_scene = scene
@@ -75,9 +77,14 @@ class SIMGame(ShowBase):
                 self.current_scene.register_camera(self.camera)
                 # register any tasks in the scene
                 self.current_scene.register_tasks(self.taskMgr)
+                #logger.debug(pprint.pformat(dir(self.loaded_obs[name])))
             else:
                 self.loaded_obs[name].hide()
                 #scene.hide()
+            #this is redundant?
+            #self.loaded_obs[name].wrtReparentTo(self.render)
+            #hand off the nodetree to the scene so it can set itself up
+            scene.setup(self.loaded_obs[name])
 
     def set_scene(self, name=None, sceneinfo=None, scene=None):
         if not scene:

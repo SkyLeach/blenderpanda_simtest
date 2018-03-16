@@ -94,6 +94,13 @@ class Scene(SceneInfo):
     def registerTasks(self, taskMgr):
         raise Exception("Abstract parent method called.")
 
+    def setup(self, root):
+        """setup
+        let children do things to their nodes to get ready for display
+        :param root: root node
+        """
+        pass
+
 class SceneObject(SceneInfo):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
