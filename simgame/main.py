@@ -6,6 +6,7 @@ import pprint
 import logging
 logger = logging.getLogger(__name__)
 import traceback
+from optparse import OptionParser
 
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
@@ -24,6 +25,8 @@ load_prc_file_data("", """
     win-size 1920 1080
     window-title S.I.M.
     win-fixed-size #f
+    framebuffer-multisample 1
+    multisamples 8
 """)
 
 # test panda_LUI
@@ -63,6 +66,7 @@ class SIMGame(ShowBase):
     registered_scenes = {}
     horizons          = {}
     loaded_obs        = {}
+    cvMgr             = None
 
     def load_registered_scenes(self):
         for (name,scene) in self.registered_scenes.items():
@@ -162,11 +166,13 @@ class SIMGame(ShowBase):
             logger.warn('No horizon with name "%s" registered.' % (name))
 
     def __init__(self):
+        self.cvMgr = ConfigVariableManager.getGlobalPtr()
         load_prc_file_data('', 'textures-power-2 none')
         super().__init__()
         blenderpanda.init(self)
         self.accept('escape', sys.exit)
-
+        if logger.isEnabledFor(logging.DEBUG):
+            self.accept('d', self.toggle_debug_tools)
         for scene in scenes.available_scenes:
             self.addScene(scene())
 # - surfdog -         self.addScene(Scene('surfdog', filename='surfdog',
@@ -189,6 +195,7 @@ class SIMGame(ShowBase):
         self.console.toggleConsole(hide=True)
 
         self.setControls()
+        self.render.set_shader_auto()
         #big mesh test with point light
         # light
 #         plight = PointLight('plight')
@@ -358,7 +365,8 @@ class SIMGame(ShowBase):
 
     def getNodeTree(self, name=None):
         if not name:
-            return self.loaded_obs[self.current_scene.name]
+            return [str(child) for child in
+                    self.loaded_obs[self.current_scene.name].ls()]
         else:
             if name in self.loaded_obs:
                 return self.loaded_obs[name]
@@ -388,11 +396,65 @@ class SIMGame(ShowBase):
 #         else:
 #             self.console.hide()
 #             base.reviveInput()
+    def toggle_debug_tools(self):
+        if self._dt_enabled:
+            loadPrcFileData("", "want-directtools #t")
+            self._dt_enabled = False
+        else:
+            loadPrcFileData("", "want-directtools #f")
+
+def parseArgs(argv=None):
+    usage = "%prog [OPTIONS]"
+    parser = OptionParser(usage=usage)
+
+    parser.add_option("--threading",
+        action="store_true",
+        help="Enable threaded and multiprocess code")
+
+    parser.add_option("--debug",
+        action="store_true",
+        help="Enable debug mode. Implies --verbose.")
+
+    parser.add_option("--verbose",
+        action="store_true",
+        help="Enable verbose mode.  Redundant if --debug is set.")
+
+    parser.add_option("--log",
+        help="Write DEBUG (if set), INFO, WARN and ERR output to file specified", metavar="FILE")
+
+    parser.add_option("--out",
+        help="Write ALL output to file specified", metavar="FILE")
+
+    parser.add_option("--config",
+        help="Use configuration from FILE", metavar="FILE")
+
+    parser.add_option("--dump-config", action="store_true",
+        dest='configdump',
+        help="List all configuration options and default values then exit.")
+
+    parser.add_option("--version", action="store_true",
+        help="Print version and exit. Note: Version is always printed.")
+
+    rval = [parser]
+    rval.extend(parser.parse_args(argv))
+    return rval
 
 if __name__ == '__main__':
-    logging.basicConfig(level=logging.DEBUG)
-    if logger.isEnabledFor(logging.DEBUG):
-        loadPrcFileData("", "want-directtools #t")
-        loadPrcFileData("", "want-tk #t")
+    (parser,opts,args) = parseArgs(sys.argv)
+    if opts.debug:
+        logging.basicConfig(level=logging.DEBUG)
+        logger.debug(pprint.pformat(opts))
+    elif opts.verbose:
+        logging.basicConfig(level=logging.INFO)
+
     game = SIMGame()
+    if opts.configdump:
+        logger.debug(
+                '**************** Available Config Vars ****************')
+        logger.debug(pprint.pformat(game.cvMgr.listVariables()))
+        logger.debug(
+                '**************** Finito Config ************************')
+        sys.exit()
+#     loadPrcFileData("", "want-directtools #t")
+        #loadPrcFileData("", "want-tk #t")
     game.run()

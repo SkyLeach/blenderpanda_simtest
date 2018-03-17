@@ -1,5 +1,7 @@
 import imp
 import os
+import logging
+logger = logging.getLogger(__name__)
 
 try:
     import pman

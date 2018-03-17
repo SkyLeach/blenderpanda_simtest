@@ -444,7 +444,7 @@ class customConsoleClass(InteractiveConsole):
         errcount=1
         while errcount:
             try:
-                print("customConsoleClass", localsEnv)
+                logger.debug("customConsoleClass", localsEnv)
                 break
             except BlockingIOError as be:
                 if errcount > 5:
@@ -525,10 +525,10 @@ class customConsoleClass(InteractiveConsole):
         if len(docString) == 1 or \
              'Traceback' in docString[1][0] or \
              'SyntaxError' in docString[-1][0]:
-            print("discarding __doc__ of %s l(%i): %s " % (pythonText, len(docString), docString))
+            logger.debug("discarding __doc__ of %s l(%i): %s " % (pythonText, len(docString), docString))
             docString = None
         else:
-            print("accepting doc string %s" % docString)
+            logger.debug("accepting doc string %s" % docString)
             docString = docString[1][0]
 
         # read the first five lines of the sourcecode
@@ -537,10 +537,10 @@ class customConsoleClass(InteractiveConsole):
         if 'SyntaxError' in inspectString[1][0] or \
              'Traceback' in inspectString[1][0] or \
              len(inspectString) > 6:
-            print("discarding inspect of %s l(%i): %s" % (pythonText, len(inspectString), inspectString))
+            logger.debug("discarding inspect of %s l(%i): %s" % (pythonText, len(inspectString), inspectString))
             inspectString = None
         else:
-            print("accepting inspect string %s" % inspectString)
+            logger.debug("accepting inspect string %s" % inspectString)
             inspectString = inspectString[1][0]
 
         # if no docstring found
@@ -551,7 +551,7 @@ class customConsoleClass(InteractiveConsole):
                 lines = inspectString
             else:
                 lines = 'no sourcecode & docstring found','',
-        print("test", lines)
+        logger.debug("test", lines)
         # return the help text
         exec( "helpText = ''.join(%s)" % str(lines) )
         #helpText = ''.join(lines)

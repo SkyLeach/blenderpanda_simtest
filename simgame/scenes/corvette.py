@@ -3,10 +3,11 @@ from math import pi, sin, cos
 import logging
 logger = logging.getLogger(__name__)
 import pprint
+import traceback
 # venv lib imports
 from direct.task import Task
 from direct.actor.Actor import Actor
-from direct.interval.IntervalGlobal import Sequence
+from direct.interval.IntervalGlobal import Sequence, Parallel
 #from pandac.PandaModules import Quat
 from panda3d.core import *
 
@@ -44,6 +45,7 @@ class Corvette(Scene):
         ('EmptyHabringClusterSphere', 0),
         ('Habgear Ring Segments', 0),
         ('HabringPointlight', 0),
+        #('PointLight Point', 0),
         ('HR Segment', 0),
         ('HR Strut', 0),
         ],[
@@ -202,7 +204,7 @@ class Corvette(Scene):
                     logger.debug(
                         'cluster parent is {}:{}'.format(name,cluster_parent))
                     continue
-                child = rootnode.find(name)
+                child = rootnode.findAllMatches(name)
                 if str(child) == '**not found**':
                     logger.warn('****** "{}" NOT FOUND! ******'.format(name))
                     continue
@@ -212,7 +214,11 @@ class Corvette(Scene):
                 if name.lower().find('light')>=0:
                     clight = cluster_parent.find(name)
                     logger.debug('Setting light {}=({})'.format(name,clight))
-                    #cluster_parent.setLight(clight)
+                    try:
+                        cluster_parent.setLight(clight)
+                    except:
+                        traceback.print_exc()
+                        pass
             if cluster_parent_name in self.cluster_specials:
                 self.cluster_specials[cluster_parent_name](cluster_parent)
             else:
@@ -221,4 +227,6 @@ class Corvette(Scene):
                     cluster_parent))
 
         #now set the parent to scene center
-        self.ship_anchor_node.setPosHpr(Vec3(0,100,0),Vec3(0,0,90))
+        #self.ship_anchor_node.setPosHpr(Vec3(0,100,0),Vec3(0,0,90))
+        Parallel(self.ship_anchor_node.posInterval(15,Vec3(0,100,0)),
+        self.ship_anchor_node.hprInterval(15,Vec3(0,0,90))).loop()

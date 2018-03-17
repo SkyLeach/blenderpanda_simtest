@@ -1,4 +1,6 @@
-from __future__ import print_function
+#from __future__ import print_function
+import logging
+logger = logging.getLogger(__name__)
 
 import imp
 import fnmatch
@@ -179,7 +181,7 @@ def get_user_config(startdir=None):
         # No user config, just create one
         config = get_config(startdir)
         file_path = os.path.join(config['internal']['projectdir'], '.pman.user')
-        print("Creating user config at {}".format(file_path))
+        logger.info("Creating user config at {}".format(file_path))
         open(file_path, 'w').close()
 
         return _get_config(startdir, '.pman.user', _USER_CONFIG_DEFAULTS)
@@ -211,9 +213,9 @@ def create_project(projectdir):
 
     confpath = os.path.join(projectdir, '.pman')
     if os.path.exists(confpath):
-        print("Updating project in {}".format(projectdir))
+        logger.info("Updating project in {}".format(projectdir))
     else:
-        print("Creating new project in {}".format(projectdir))
+        logger.info("Creating new project in {}".format(projectdir))
 
         # Touch config file to make sure it is present
         with open(confpath, 'a') as f:
@@ -226,7 +228,7 @@ def create_project(projectdir):
     templatedir = os.path.join(pmandir, 'templates')
     bpmodpath = os.path.join(projectdir, 'game/blenderpanda')
 
-    print("Creating directories...")
+    logger.info("Creating directories...")
 
     dirs = [
         'assets',
@@ -250,42 +252,42 @@ def create_project(projectdir):
 
     for d in dirs:
         if os.path.exists(d):
-            print("\tSkipping existing directory: {}".format(d))
+            logger.debug("\tSkipping existing directory: {}".format(d))
         else:
-            print("\tCreating directory: {}".format(d))
+            logger.info("\tCreating directory: {}".format(d))
             os.mkdir(d)
 
-    print("Creating main.py")
+    logger.info("Creating main.py")
     with open(os.path.join(templatedir, 'main.py')) as f:
         main_data = f.read()
 
     mainpath = os.path.join(projectdir, 'game', 'main.py')
     if os.path.exists(mainpath):
-        print("\tmain.py already exists at {}".format(mainpath))
+        logger.debug("\tmain.py already exists at {}".format(mainpath))
     else:
         with open(mainpath, 'w') as f:
             f.write(main_data)
-        print("\tmain.py created at {}".format(mainpath))
+        logger.info("\tmain.py created at {}".format(mainpath))
 
     if os.path.exists(bpmodpath):
-        print("Updating blenderpanda module")
+        logger.info("Updating blenderpanda module")
         shutil.rmtree(bpmodpath)
     else:
-        print("Creating blenderpanda module")
+        logger.info("Creating blenderpanda module")
     os.mkdir(bpmodpath)
     for copy_file in bpanda_mod_files:
         bname = os.path.basename(copy_file)
-        print("\tCopying over {}".format(bname))
+        logger.info("\tCopying over {}".format(bname))
         cfsrc = os.path.join(pmandir, copy_file)
         cfdst = os.path.join(projectdir, 'game', 'blenderpanda', bname)
-        print(cfsrc, cfdst)
+        logger.info(cfsrc, cfdst)
         if os.path.isdir(cfsrc):
             shutil.copytree(cfsrc, cfdst)
         else:
             shutil.copy(cfsrc, cfdst)
-        print("\t\t{} created at {}".format(bname, cfdst))
+        logger.info("\t\t{} created at {}".format(bname, cfdst))
 
-    print("Copying pman")
+    logger.info("Copying pman")
     pmantarget = os.path.join(bpmodpath, 'pman')
     if os.path.exists(pmantarget):
         shutil.rmtree(pmantarget)
@@ -353,7 +355,7 @@ def converter_copy(_config, _user_config, srcdir, dstdir, assets):
     for asset in assets:
         src = asset
         dst = src.replace(srcdir, dstdir)
-        print('Copying non-blend file from "{}" to "{}"'.format(src, dst))
+        logger.info('Copying non-blend file from "{}" to "{}"'.format(src, dst))
         if not os.path.exists(os.path.dirname(dst)):
             os.makedirs(os.path.dirname(dst))
         shutil.copyfile(src, dst)
@@ -440,7 +442,7 @@ class PMan(object):
             stime = time.perf_counter()
         else:
             stime = time.time()
-        print("Starting build")
+        logger.info("Starting build")
 
         srcdir = self.get_abs_path(self.config['build']['asset_dir'])
         dstdir = self.get_abs_path(self.config['build']['export_dir'])
@@ -449,14 +451,14 @@ class PMan(object):
             raise BuildError("Could not find asset directory: {}".format(srcdir))
 
         if not os.path.exists(dstdir):
-            print("Creating asset export directory at {}".format(dstdir))
+            logger.info("Creating asset export directory at {}".format(dstdir))
             os.makedirs(dstdir)
 
-        print("Read assets from: {}".format(srcdir))
-        print("Export them to: {}".format(dstdir))
+        logger.info("Read assets from: {}".format(srcdir))
+        logger.info("Export them to: {}".format(dstdir))
 
         ignore_patterns = self.config['build']['ignore_patterns']
-        print("Ignoring file patterns: {}".format(ignore_patterns))
+        logger.info("Ignoring file patterns: {}".format(ignore_patterns))
 
         # Gather files and group by extension
         ext_asset_map = {}
@@ -478,7 +480,7 @@ class PMan(object):
                         ignore_pattern = pattern
                         break
                 if ignore_pattern is not None:
-                    print('Skip building file {} that matched ignore pattern {}'.format(asset, ignore_pattern))
+                    logger.info('Skip building file {} that matched ignore pattern {}'.format(asset, ignore_pattern))
                     continue
 
                 ext = os.path.splitext(asset)[1]
@@ -487,13 +489,13 @@ class PMan(object):
                     dst = dst.replace(ext, ext_dst_map[ext])
 
                 if os.path.exists(dst) and os.stat(src).st_mtime <= os.stat(dst).st_mtime:
-                    print('Skip building up-to-date file: {}'.format(dst))
+                    logger.info('Skip building up-to-date file: {}'.format(dst))
                     continue
 
                 if ext not in ext_asset_map:
                     ext_asset_map[ext] = []
 
-                print('Adding {} to conversion list to satisfy {}'.format(src, dst))
+                logger.info('Adding {} to conversion list to satisfy {}'.format(src, dst))
                 ext_asset_map[ext].append(os.path.join(root, asset))
 
         # Find which extensions have hooks available
@@ -517,14 +519,14 @@ class PMan(object):
             etime = time.perf_counter()
         else:
             etime = time.time()
-        print("Build took {:.4f}s".format(etime - stime))
+        logger.info("Build took {:.4f}s".format(etime - stime))
 
     def run(self):
         if is_frozen():
             raise FrozenEnvironmentError()
 
         mainfile = self.get_abs_path(self.config['run']['main_file'])
-        print("Running main file: {}".format(mainfile))
+        logger.info("Running main file: {}".format(mainfile))
         args = [get_python_program(self.config), mainfile]
-        #print("Args: {}".format(args))
+        #logger.info("Args: {}".format(args))
         subprocess.Popen(args, cwd=self.config['internal']['projectdir'])

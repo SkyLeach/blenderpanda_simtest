@@ -1,4 +1,7 @@
 import os
+import logging
+logger = logging.getLogger(__name__)
+
 from . import pman
 from .pman import rendermanager
 import panda3d.core as p3d
