@@ -13,6 +13,7 @@ from panda3d.core import *
 import blenderpanda
 
 from simpleconsole import ConsoleWindow
+from version import VersionInfo
 
 load_prc_file_data("", """
     notify-level-lui info
@@ -67,6 +68,10 @@ class SIMGame(ShowBase):
     horizons          = {}
     loaded_obs        = {}
     cvMgr             = None
+
+    @property
+    def version(self):
+        return 
 
     def load_registered_scenes(self):
         for (name,scene) in self.registered_scenes.items():
@@ -446,7 +451,12 @@ if __name__ == '__main__':
         logger.debug(pprint.pformat(opts))
     elif opts.verbose:
         logging.basicConfig(level=logging.INFO)
-
+    if opts.version:
+        if not logger.isEnabledFor(logging.INFO):
+            print(VersionInfo.__str__())
+        else:
+            logger.info(VersionInfo.__str__())
+        sys.exit()
     game = SIMGame()
     if opts.configdump:
         logger.debug(
