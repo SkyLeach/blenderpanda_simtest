@@ -33,9 +33,8 @@ class Corvette(Scene):
         ('Leaf Panel', 0),
         ('Tank', 0),
         ('Shieldcap', 1121.2*4),
-        # ('Empty Engine Anchor Sphere',0),
-        # ('Empty Tank Anchor Sphere',0),
-        ('HabringPointlight',0),
+        ('Empty Engine Anchor Sphere',0),
+        ('Empty Tank Anchor Sphere',0),
         ('Shieldcap Lamp',0),
         ('Engine Area Light',0),
         ('Cube Engine',0),
@@ -219,4 +218,4 @@ class Corvette(Scene):
             #self.habring_rotate(cluster_parent)
 
         #now set the parent to scene center
-        self.ship_anchor_node.setPos(Vec3(0,0,0))
+        #self.ship_anchor_node.setPosHpr(Vec3(0,100,0),Vec3(0,0,90))

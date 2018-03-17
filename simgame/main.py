@@ -66,8 +66,9 @@ class SIMGame(ShowBase):
 
     def load_registered_scenes(self):
         for (name,scene) in self.registered_scenes.items():
-            self.loaded_obs[name] = \
-                scene.load(self.loader, self.render)
+            self.load_scene(sceneinfo=scene)
+            #self.loaded_obs[name] = \
+            #    scene.load(self.loader, self.render)
             #for part in self.loaded_obs[name].:
             #    logger.debug('Scene obj {} loaded...'.format(part))
             if not self.current_scene and name == self.start_scene:
@@ -109,6 +110,15 @@ class SIMGame(ShowBase):
                     sceneinfo = self.registered_scenes[name]
                 self.loaded_obs[name] =\
                     sceneinfo.load(self.loader, self.render)
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug('Scenegraph:')
+                    logger.debug('    {}'.format(pprint.pformat(
+                        self.loaded_obs[name].ls())))
+                    #lights only
+                    logger.debug('Scenegraph Lights')
+                    logger.debug('    {}'.format(
+                        pprint.pformat([ name for name in self.loaded_obs[name].ls() if
+                        name.lower.find('light')])))
                 return self.loaded_obs[name]
         except:
             logger.warn('No scene with name "%s" registered.')
@@ -138,7 +148,7 @@ class SIMGame(ShowBase):
                 self.loaded_obs[name] = horizon
                 horizon = self.loaded_obs[name]
                 horizon.reparentTo(self.camera)
-                #horizon.setScale(0.0015, 0.0015, 0.0015)
+                horizon.setScale(5, 5, 5)
                 horizon.set_two_sided(True)
                 horizon.set_bin("background", 0)
                 horizon.set_depth_write(False)
