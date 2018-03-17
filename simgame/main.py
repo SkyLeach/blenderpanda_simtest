@@ -315,8 +315,10 @@ class SIMGame(ShowBase):
         self.console.toggleConsole()
 
     def setGlobalControls(self):
-        # self.accept("s", self.swap_horizon)
-        # self.accept("w", self.toggle_sky_wireframe)
+        if logger.isEnabledFor(logging.DEBUG):
+            logger.debug('Enabling debug controls')
+            self.accept("s", self.swap_horizon)
+            self.accept("w", self.toggle_sky_wireframe)
         self.accept( self.console.gui_key, self.console.toggleConsole )
         # exit game
         self.accept("escape", sys.exit)
@@ -354,6 +356,14 @@ class SIMGame(ShowBase):
             self.wiresky = True
             self.loaded_obs[self.horizon].set_render_mode_wireframe()
 
+    def getNodeTree(self, name=None):
+        if not name:
+            return self.loaded_obs[self.current_scene.name]
+        else:
+            if name in self.loaded_obs:
+                return self.loaded_obs[name]
+        return ['Unknown name "{}"'.format(name)]
+
     def swap_horizon(self):
         self.loaded_obs[self.horizon].hide()
         if self.horizon == 'skybox':
@@ -381,5 +391,8 @@ class SIMGame(ShowBase):
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
+    if logger.isEnabledFor(logging.DEBUG):
+        loadPrcFileData("", "want-directtools #t")
+        loadPrcFileData("", "want-tk #t")
     game = SIMGame()
     game.run()

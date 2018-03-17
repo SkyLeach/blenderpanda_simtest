@@ -209,13 +209,16 @@ class Corvette(Scene):
                 logger.debug('Reparenting {} ({}) to {}'.format(name, child,
                     self.ship_anchor_node))
                 child.wrtReparentTo(cluster_parent)
+                if name.lower().find('light')>=0:
+                    clight = cluster_parent.find(name)
+                    logger.debug('Setting light {}=({})'.format(name,clight))
+                    #cluster_parent.setLight(clight)
             if cluster_parent_name in self.cluster_specials:
                 self.cluster_specials[cluster_parent_name](cluster_parent)
             else:
                 logger.warn('Cluster handle {}:({}) has no special func.'.format(
                     cluster_parent_name,
                     cluster_parent))
-            #self.habring_rotate(cluster_parent)
 
         #now set the parent to scene center
-        #self.ship_anchor_node.setPosHpr(Vec3(0,100,0),Vec3(0,0,90))
+        self.ship_anchor_node.setPosHpr(Vec3(0,100,0),Vec3(0,0,90))
