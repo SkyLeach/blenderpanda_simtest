@@ -1,6 +1,6 @@
-[python]
-path = "/Users/magregor/.virtualenvs/SIM/bin/python"
-
 [blender]
 last_path = "/Applications/Blender.app/Contents/MacOS/blender"
 use_last_path = true
+
+[python]
+path = "/Users/magregor/.virtualenvs/SIM/bin/python"

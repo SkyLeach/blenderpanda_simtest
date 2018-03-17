@@ -14,33 +14,69 @@ from panda3d.core import *
 from .scene import ControlMap, Scene
 
 class Corvette(Scene):
-    default_controls = None
-    angle        = 0.0
-    pitch        = 0.0
-    adjust_angle = 0.0
-    adjust_pitch = 0.0
-    last_time    = 0.0
-    cam_speed = 0.5
+    default_controls  = None
+    angle             = 0.0
+    pitch             = 0.0
+    adjust_angle      = 0.0
+    adjust_pitch      = 0.0
+    last_time         = 0.0
+    cam_speed         = 0.5
+    # multiplier to scale up mesh for mass calculations.
+    ship_anchor_node  = None
 
-    ship_anchor_node = None
-
+    #seconds and mass in metric tonnes
     major_section_names = [
-        'EmptyTransformSphere',
-        'EmptyHabringClusterSphere',
-        'CenterSpine', # start here for now
-        'Engineering',
-        'Lamp',
-        'Leaf Panel',
-        'Tank',
-        'Shieldcap',
+        ('EmptyTransformSphere', 0),
+        ('EmptyHabringClusterSphere', 0),
+        ('CenterSpine', 30345), # start here for now
+        ('Engineering', 0),
+        ('Leaf Panel', 0),
+        ('Tank', 0),
+        ('Shieldcap', 1121.2*4),
+        # ('Empty Engine Anchor Sphere',0),
+        # ('Empty Tank Anchor Sphere',0),
+        ('HabringPointlight',0),
+        ('Shieldcap Lamp',0),
+        ('Engine Area Light',0),
+        ('Cube Engine',0),
+        ('Trap-Engine',0),
         ]
     obj_clusters = [[
-        'EmptyHabringClusterSphere',
-        'Habgear Ring Segments',
-        'HabringPointlight',
-        'HR Segment',
-        'HR Strut',
+        ('EmptyHabringClusterSphere', 0),
+        ('Habgear Ring Segments', 0),
+        ('HabringPointlight', 0),
+        ('HR Segment', 0),
+        ('HR Strut', 0),
+        ],[
     ]]
+    obj_spacesuit = [
+        ('SpaceSuitLight.L',0),
+        ('Spacesuit.Helmet.Light.R',0),
+        ('Cadera',0),
+        ('Cadera.001',0),
+        ('SpacesuitPoseBase',0),
+        ('SpacesuitPosebase2',0),
+        ('Spacesuit.Armature.Femur.L',0),
+        ('Spacesuit.Armature.Femur.R',0),
+        ('Spacesuit.Mano',0),
+        ('Spacesuitmetarig',0),
+        ('Casco',0),
+        ('Cubre todo.001',0),
+        ('Cubre todo.002',0),
+        ('Parasol costado.001',0),
+        ('Lamparas',0),
+        ('Parasol',0),
+        ('Traje (Suit)',0),
+        ('Vidrio (Glass)',0),
+        ('SpacesuitRightfootPlaneHook.01',0),
+        ('SpacesuitLeftfootPlaneHook.02',0),
+        ('Spacesuit.Pierna.L',0),
+        ('Spacesuit.Pierna.R',0),
+        ('Spacesuit.Plane.001',0),
+        ('SpacesuitPolo.L',0),
+        ('SpacesuitPolo.R',0),
+    ]
+    cluster_specials = None
     @property
     def camera(self): return self._camera
     @camera.setter
@@ -71,6 +107,10 @@ class Corvette(Scene):
         }
         super().__init__('corvette', filename='corvette.bam',
             controls=list(self.default_controls.values()))
+
+        self.cluster_specials = {
+            'EmptyHabringClusterSphere' : self.habring_rotate,
+        }
 
     def adjust_turning(self, heading, pitch):
         self.adjust_angle += heading
@@ -139,7 +179,7 @@ class Corvette(Scene):
 
     def setup(self, rootnode):
         habring = None
-        for ndex,name in enumerate(self.major_section_names):
+        for ndex,(name, mass) in enumerate(self.major_section_names):
             if not ndex:
                 self.ship_anchor_node = rootnode.find(name)
                 logger.debug('parent is {}:{}'.format(name,self.ship_anchor_node))
@@ -147,18 +187,36 @@ class Corvette(Scene):
             if not self.ship_anchor_node:
                 raise Exception('This shouldn\'t happen.')
             child = rootnode.find(name)
+            if str(child) == '**not found**':
+                logger.warn('****** "{}" NOT FOUND! ******'.format(name))
+                continue
+            logger.debug('Reparenting {} ({}) to {}'.format(name, child,
+                self.ship_anchor_node))
             child.wrtReparentTo(self.ship_anchor_node)
         for cluster in self.obj_clusters:
             cluster_parent = None
-            for ndex,name in enumerate(cluster):
+            cluster_parent_name = None
+            for ndex,(name, mass) in enumerate(cluster):
                 if not ndex:
                     cluster_parent = self.ship_anchor_node.find(name)
+                    cluster_parent_name = name
                     logger.debug(
                         'cluster parent is {}:{}'.format(name,cluster_parent))
                     continue
                 child = rootnode.find(name)
+                if str(child) == '**not found**':
+                    logger.warn('****** "{}" NOT FOUND! ******'.format(name))
+                    continue
+                logger.debug('Reparenting {} ({}) to {}'.format(name, child,
+                    self.ship_anchor_node))
                 child.wrtReparentTo(cluster_parent)
-            self.habring_rotate(cluster_parent)
+            if cluster_parent_name in self.cluster_specials:
+                self.cluster_specials[cluster_parent_name](cluster_parent)
+            else:
+                logger.warn('Cluster handle {}:({}) has no special func.'.format(
+                    cluster_parent_name,
+                    cluster_parent))
+            #self.habring_rotate(cluster_parent)
 
         #now set the parent to scene center
         self.ship_anchor_node.setPos(Vec3(0,0,0))
