@@ -14,6 +14,8 @@ import blenderpanda
 
 from simpleconsole import ConsoleWindow
 from version import VersionInfo
+    #want-directtools true
+    #want-tk true
 
 load_prc_file_data("", """
     notify-level-lui info
@@ -68,6 +70,8 @@ class SIMGame(ShowBase):
     horizons          = {}
     loaded_obs        = {}
     cvMgr             = None
+    _dt_enabled       = False
+    _dttk_enabled     = False
 
     @property
     def version(self):
@@ -401,12 +405,16 @@ class SIMGame(ShowBase):
 #         else:
 #             self.console.hide()
 #             base.reviveInput()
+
     def toggle_debug_tools(self):
         if self._dt_enabled:
-            loadPrcFileData("", "want-directtools #t")
+            loadPrcFileData("", "want-directtools true")
+            loadPrcFileData("", "want-tk true")
             self._dt_enabled = False
         else:
-            loadPrcFileData("", "want-directtools #f")
+            loadPrcFileData("", "want-directtools false")
+            loadPrcFileData("", "want-tk false")
+            self._dt_enabled = True
 
 def parseArgs(argv=None):
     usage = "%prog [OPTIONS]"
@@ -437,8 +445,15 @@ def parseArgs(argv=None):
         dest='configdump',
         help="List all configuration options and default values then exit.")
 
+    parser.add_option("--make-config-file", action="store_true",
+        dest='saveconfigdump',
+        help="Load the game, save the current config, then exit.")
+
     parser.add_option("--version", action="store_true",
         help="Print version and exit. Note: Version is always printed.")
+
+    parser.add_option('--directtools', action='store_true',
+        help="Enable directtools panda3d dev interface.")
 
     rval = [parser]
     rval.extend(parser.parse_args(argv))
@@ -461,10 +476,16 @@ if __name__ == '__main__':
     if opts.configdump:
         logger.debug(
                 '**************** Available Config Vars ****************')
-        logger.debug(pprint.pformat(game.cvMgr.listVariables()))
+        logger.debug(pprint.pformat(game.cvMgr.getVariables()))
         logger.debug(
                 '**************** Finito Config ************************')
         sys.exit()
+    if opts.saveconfigdump:
+        with open('game.cfg', 'w') as cfgfile:
+            cfgfile.writelines([str(v) for v in game.cvMgr.getVariables()])
+        print(cpMgr)
+        sys.exit()
 #     loadPrcFileData("", "want-directtools #t")
-        #loadPrcFileData("", "want-tk #t")
+    if opts.directtools:
+        game.toggle_debug_tools()
     game.run()
