@@ -1,8 +1,8 @@
 [build]
 converter_hooks = [ "pman.hooks.converter_blend_bam",]
 ignore_patterns = [ "*.blend1", "*.blend2",]
-export_dir = "assets/"
-asset_dir = "assets/"
+export_dir = "simgame/assets/"
+asset_dir = "simgame/assets/"
 
 [general]
 render_plugin = ""

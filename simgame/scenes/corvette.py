@@ -208,6 +208,8 @@ class Corvette(Scene):
                 for linfo in self.sceneobj_lights:
                     light = linfo['type'](linfo['name'])
                     light.setColor(linfo['color'])
+                    #christ that's awful
+                    #light.setShadowCaster(True)
                     #light.setAttenuation((1, 0, 1))
                     parent = rootnode.find(linfo['parent'])
                     lnode = rootnode.attachNewNode(light)
@@ -215,7 +217,10 @@ class Corvette(Scene):
                     rootnode.setLight(lnode)
                     self.translights.append(lnode)
                     # lnode path will have changed.  Re-find it.
-                    rootnode.find(linfo[name])
+                    logger.debug('prevpath: {}'.format(lnode))
+                    logger.debug('prevpath: {}'.format(
+                        rootnode.find(linfo['name'])))
+                    #rootnode.find(linfo['name'])
                 continue
             if not self.ship_anchor_node:
                 raise Exception('This shouldn\'t happen.')
