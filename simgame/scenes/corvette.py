@@ -7,7 +7,7 @@ import traceback
 # venv lib imports
 from direct.task import Task
 from direct.actor.Actor import Actor
-from direct.interval.IntervalGlobal import Sequence, Parallel
+from direct.interval.IntervalGlobal import Sequence, Parallel, Func
 #from pandac.PandaModules import Quat
 from panda3d.core import *
 
@@ -24,8 +24,18 @@ class Corvette(Scene):
     cam_speed         = 0.5
     # multiplier to scale up mesh for mass calculations.
     ship_anchor_node  = None
+    translights = [] #lights subject to transformation events using delta-v
 
     #seconds and mass in metric tonnes
+    sceneobj_lights = [{
+            'name' : 'HRSegLight',
+            'color' : VBase4(0.6, 0.7, 1, 1),
+            'parent' : 'Leaf Panel',
+            #'translate' : (Vec3(87.8968,-7.49207,23.467),Vec3(0,0,0)),
+            'translate' : (Vec3(0,0,-330),Vec3(0,0,0)),
+            'type' : PointLight
+            },
+        ]
     major_section_names = [
         ('EmptyTransformSphere', 0),
         ('EmptyHabringClusterSphere', 0),
@@ -36,8 +46,8 @@ class Corvette(Scene):
         ('Shieldcap', 1121.2*4),
         ('Empty Engine Anchor Sphere',0),
         ('Empty Tank Anchor Sphere',0),
-        ('Shieldcap Lamp',0),
-        ('Engine Area Light',0),
+        #('Shieldcap Lamp',0),
+        #('Engine Area Light',0),
         ('Cube Engine',0),
         ('Trap-Engine',0),
         ]
@@ -88,6 +98,7 @@ class Corvette(Scene):
         self.camera.look_at(0,0,0)
 
     def __init__(self):
+        self.actor_scene = True
         self.default_controls = {
             'l.turn' : ControlMap('l.turn', 'arrow_left', self.adjust_turning,
                 args=[-1.0, 0.0]),
@@ -178,12 +189,33 @@ class Corvette(Scene):
         rseq = Sequence(habringnode.hprInterval(rotseconds,Vec3(360,0,0)),name='Hab Ring Rotate')
         rseq.loop()
 
+    def moveLights(self):
+        return
+        deltav = self.ship_anchor_node.getPosDelta()
+        deltaq = self.ship_anchor_node.getQuat()
+                #self.ship_anchor_node.find('HR Segment'))
+        for light in self.translights:
+            light.setPos(deltav)
+            light.setQuat(deltaq)
+
     def setup(self, rootnode):
-        habring = None
+        # TODO: move this to parent
+        rootnode.setAntialias(AntialiasAttrib.MAuto)
         for ndex,(name, mass) in enumerate(self.major_section_names):
             if not ndex:
                 self.ship_anchor_node = rootnode.find(name)
                 logger.debug('parent is {}:{}'.format(name,self.ship_anchor_node))
+                for linfo in self.sceneobj_lights:
+                    light = linfo['type'](linfo['name'])
+                    light.setColor(linfo['color'])
+                    #light.setAttenuation((1, 0, 1))
+                    parent = rootnode.find(linfo['parent'])
+                    lnode = rootnode.attachNewNode(light)
+                    lnode.setPosHpr(*linfo['translate'])
+                    rootnode.setLight(lnode)
+                    self.translights.append(lnode)
+                    # lnode path will have changed.  Re-find it.
+                    rootnode.find(linfo[name])
                 continue
             if not self.ship_anchor_node:
                 raise Exception('This shouldn\'t happen.')
@@ -201,6 +233,7 @@ class Corvette(Scene):
                 if not ndex:
                     cluster_parent = self.ship_anchor_node.find(name)
                     cluster_parent_name = name
+
                     logger.debug(
                         'cluster parent is {}:{}'.format(name,cluster_parent))
                     continue
@@ -211,14 +244,14 @@ class Corvette(Scene):
                 logger.debug('Reparenting {} ({}) to {}'.format(name, child,
                     self.ship_anchor_node))
                 child.wrtReparentTo(cluster_parent)
-                if name.lower().find('light')>=0:
-                    clight = cluster_parent.find(name)
-                    logger.debug('Setting light {}=({})'.format(name,clight))
-                    try:
-                        cluster_parent.setLight(clight)
-                    except:
-                        traceback.print_exc()
-                        pass
+# -weirdlight-                 if name.lower().find('light')>=0:
+# -weirdlight-                     clight = cluster_parent.find(name)
+# -weirdlight-                     logger.debug('Setting light {}=({})'.format(name,clight))
+# -weirdlight-                     try:
+# -weirdlight-                         cluster_parent.setLight(clight)
+# -weirdlight-                     except:
+# -weirdlight-                         traceback.print_exc()
+# -weirdlight-                         pass
             if cluster_parent_name in self.cluster_specials:
                 self.cluster_specials[cluster_parent_name](cluster_parent)
             else:
@@ -228,5 +261,17 @@ class Corvette(Scene):
 
         #now set the parent to scene center
         #self.ship_anchor_node.setPosHpr(Vec3(0,100,0),Vec3(0,0,90))
-        Parallel(self.ship_anchor_node.posInterval(15,Vec3(0,100,0)),
-        self.ship_anchor_node.hprInterval(15,Vec3(0,0,90))).loop()
+#         shipactor = Actor()
+#         rootnode.attachNode(shipactor)
+#         self.ship_anchor_node.wrtReparentTo(shipactor)
+        time=15
+        pos = Vec3(0,100,0)
+        hpr = Vec3(0,0,90)
+        Parallel(
+                self.ship_anchor_node.posInterval(time, pos),
+                self.ship_anchor_node.hprInterval(time, hpr),
+                Func(self.moveLights)
+            ).loop()
+#         for lnode in self.translights:
+#             Parallel(lnode.posInterval(time, pos),
+#             lnode.hprInterval(time, hpr)).loop()

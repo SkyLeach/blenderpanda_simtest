@@ -1,5 +1,4 @@
 """ Core game module for S.I.M. """
-from version import VersionInfo
-version = str(VersionInfo.version())
-from main import SIMGame as sim_game
-GAME_NAME=VersionInfo.name()
+from .version import VersionInfo as version
+VERSION = str('.'.join([str(n) for n in version.version()]))
+GAME_NAME=version.name()

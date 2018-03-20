@@ -10,6 +10,8 @@ from optparse import OptionParser
 
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
+
+#local imports
 import blenderpanda
 
 from simpleconsole import ConsoleWindow
@@ -18,6 +20,7 @@ from version import VersionInfo
     #want-tk true
 
 load_prc_file_data("", """
+    want-directtools true
     notify-level-lui info
     text-minfilter linear
     text-magfilter linear
@@ -72,10 +75,6 @@ class SIMGame(ShowBase):
     cvMgr             = None
     _dt_enabled       = False
     _dttk_enabled     = False
-
-    @property
-    def version(self):
-        return 
 
     def load_registered_scenes(self):
         for (name,scene) in self.registered_scenes.items():

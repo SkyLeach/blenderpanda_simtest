@@ -9,6 +9,7 @@ class SceneInfo(object):
     lights          = None
     children        = None
     loaded_children = {}
+    actor_scene     = False
 
     def __init__(self, name, **kwargs):
         self.name      = name

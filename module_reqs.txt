@@ -1,6 +1,9 @@
 numpy==1.14.1
-panda3d
+panda3d>=1.10.0
 pudb==2017.1.4
 Pygments==2.2.0
 urwid==2.0.1
 Pmw>=2.0.1
+astropy>=3.0.1
+jplephem>=2.7
+pysolar>=0.7
