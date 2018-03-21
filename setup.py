@@ -33,6 +33,13 @@ setup(
         'astropy>=3.0.1',
         'jplephem>=2.7',
         'pysolar>=0.7',
+        'neovim>=0.2',
+        'Flask-Bootstrap>=3.3.5',
+        'webassets>=0.1',
+        'Flask-Session>=0.3',
+        'Flask-WTF>=0.12',
+        'Flask-Login>=0.4',
+        'flask-nav>=0.6',
     ],
     entry_points      = {
         'console_scripts': [

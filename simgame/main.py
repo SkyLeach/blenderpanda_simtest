@@ -7,6 +7,7 @@ import logging
 logger = logging.getLogger(__name__)
 import traceback
 from optparse import OptionParser
+import atexit
 
 from direct.showbase.ShowBase import ShowBase
 from panda3d.core import *
@@ -50,10 +51,17 @@ load_prc_file_data("", """
 
 #from scene import * # SceneInfo, Scene, SceneObject
 import scenes
+import queue
 from scenes.scene import Background
 
 #local imports
 #from InteractiveConsole import pandaConsole, INPUT_CONSOLE, INPUT_GUI, OUTPUT_PYTHON, OUTPUT_IRC
+
+class DevUIUpdate(object):
+    name = None
+    widget = None
+    def __init__(self, *args, *kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class SIMGame(ShowBase):
@@ -75,6 +83,20 @@ class SIMGame(ShowBase):
     cvMgr             = None
     _dt_enabled       = False
     _dttk_enabled     = False
+
+    _remoteui_updates = queue.Queue()
+    @property
+    def updates(self):
+        """updates
+        returns multiple updates as a single dict
+        """
+        action_items = []
+        while not self._remoteui_updates.empty():
+            action_items.append(self._remoteui_updates.popleft()
+        return action_items
+
+    def add_remoteui_update(self, UpdateClass):
+
 
     def load_registered_scenes(self):
         for (name,scene) in self.registered_scenes.items():
@@ -204,6 +226,7 @@ class SIMGame(ShowBase):
 
         self.setControls()
         self.render.set_shader_auto()
+        atexit.register(self.killRestServer)
         #big mesh test with point light
         # light
 #         plight = PointLight('plight')
@@ -370,6 +393,11 @@ class SIMGame(ShowBase):
         else:
             self.wiresky = True
             self.loaded_obs[self.horizon].set_render_mode_wireframe()
+
+    def update_dev_settings(self, task):
+        if self.updates:
+            pass
+        return Task.cont
 
     def getNodeTree(self, name=None):
         if not name:
