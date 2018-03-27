@@ -21,8 +21,6 @@ from direct.gui.DirectGui import DirectScrolledList
 from direct.gui.OnscreenText import OnscreenText
 from completer import completePython
 
-from builtins import base
-
 # module-level logger
 logger = logging.getLogger(__name__)
 
@@ -132,6 +130,7 @@ class ConsoleWindow(DirectObject.DirectObject):
     clipboardTextRaw = None
 
     def __init__(self, parent):
+        global base
         if not logger.isEnabledFor(logging.DEBUG):
             global CONSOLE_MESSAGE
             CONSOLE_MESSAGE = '''

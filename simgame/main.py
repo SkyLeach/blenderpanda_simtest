@@ -20,7 +20,6 @@ from scenes.scene import Background
 from simpleconsole import ConsoleWindow
 from version import VersionInfo
 
-
 logger = logging.getLogger(__name__)
 # from scene import * # SceneInfo, Scene, SceneObject
 # local imports
@@ -128,11 +127,18 @@ class SIMGame(ShowBase):
                     logger.debug('Scenegraph Lights')
                     logger.warn('testme')
                     logger.debug('    {}'.format(
-                        pprint.pformat([ name for name in self.loaded_obs[name].ls() if
-                        name.lower.find('light')])))
+                        pprint.pformat(
+                            [
+                                name for name in
+                                self.loaded_obs[name].ls() if
+                                name.lower.find('light')
+                            ])
+                    ))
                 return self.loaded_obs[name]
-        except:
-            logger.warn('No scene with name "%s" registered.')
+        except Exception:
+            logger.warn('Problems loading scene:')
+            logger.warn('    Name: {}'.format(name))
+            logger.warn('    SceneInfo: {}'.format(sceneinfo))
 
     def addScene(self, scene):
         self.registered_scenes[scene.name] = scene
@@ -168,9 +174,9 @@ class SIMGame(ShowBase):
                 if self.horizon != horizoninfo.name:
                     horizon.hide()
                 return horizon
-        except:
+        except Exception:
             traceback.print_exc()
-            logger.warn('No horizon with name "%s" registered.' % (name))
+            logger.warn('No horizon with name "{}" registered.'.format(name))
 
     def killRestServer(self):
         """killRestServer
@@ -215,7 +221,7 @@ class SIMGame(ShowBase):
 #         plight = PointLight('plight')
 #         plight.setColor(VBase4(0.2, 0.2, 0.2, 1))
 #         plight.setAttenuation((1, 0, 1))
-# 
+#
 #         plnp = self.render.attachNewNode(plight)
 #         plnp.setPos(1, 21, -20)
 #         self.render.setLight(plnp)
@@ -234,7 +240,7 @@ class SIMGame(ShowBase):
 # -actor-         self.pandaActor.reparentTo(self.render)
 # -actor-         # Loop its animation.
 # -actor-         self.pandaActor.loop("walk")
-# -actor- 
+# -actor-
 # -actor-         # Create the four lerp intervals needed for the panda to
 # -actor-         # walk back and forth.
 # -actor-         pandaPosInterval1 = self.pandaActor.posInterval(13,
@@ -249,7 +255,7 @@ class SIMGame(ShowBase):
 # -actor-         pandaHprInterval2 = self.pandaActor.hprInterval(3,
 # -actor-             Point3(0, 0, 0),
 # -actor-             startHpr=Point3(180, 0, 0))
-# -actor- 
+# -actor-
 # -actor-         # Create and play the sequence that coordinates the intervals.
 # -actor-         self.pandaPace = Sequence(pandaPosInterval1,
 # -actor-                                   pandaHprInterval1,
@@ -316,7 +322,7 @@ class SIMGame(ShowBase):
 # -- fix LUI --         label.add(text=">>>  ", color=(0.35, 0.65, 0.24, 1.0))
 # -- fix LUI --         label.add(text=event.message, color=color)
 # -- fix LUI --         self.layout.add(label)
-# -- fix LUI -- 
+# -- fix LUI --
 # -- fix LUI --         result = LUIFormattedLabel()
 # -- fix LUI --         if sys.version_info[0]==3 and sys.version_info[1]>2:
 # -- fix LUI --             import codecs
@@ -325,15 +331,13 @@ class SIMGame(ShowBase):
 # -- fix LUI --             result.add("Your command in rot13: " + event.message.encode("rot13"), color=(0.4, 0.4, 0.4, 1.0))
 # -- fix LUI --         self.layout.add(result)
 # -- fix LUI --         self.input_field.clear()
-# -- fix LUI -- 
+# -- fix LUI --
 # -- fix LUI --         self.text_container.scroll_to_bottom()
 
 
     def toggleConsole(self):
         # unset all controls but console
         self.ignoreAll()
-        # I'm not 100% sure where base is set, I think it's a global in the
-        # panda3d Threading wrapper around the cpp
         global base
         base.camLens.setFocalLength(5)
         self.console.toggleConsole()
@@ -419,6 +423,7 @@ class SIMGame(ShowBase):
 #             base.reviveInput()
 
     def toggle_debug_tools(self):
+        # TODO: change this to the reload funcs
         if self._dt_enabled:
             load_prc_file_data("", "want-directtools true")
             load_prc_file_data("", "want-tk true")
