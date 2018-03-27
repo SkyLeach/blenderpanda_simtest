@@ -13,11 +13,14 @@ class SceneInfo(object):
 
     def __init__(self, name, **kwargs):
         self.name      = name
-        self.scale_arr = kwargs.get('scale',
+        self.scale_arr = kwargs.get(
+            'scale',
             [1.0, 1.0, 1.0])
-        self.pos_arr   = kwargs.get('position',
+        self.pos_arr   = kwargs.get(
+            'position',
             [0.0, 0.0, 0.0])
-        self.hpr_arr   = kwargs.get('hpr',
+        self.hpr_arr   = kwargs.get(
+            'hpr',
             [0.0, 0.0, 0.0])
         self.filename  += kwargs.get('filename', self.name)
         self.lights    = kwargs.get('lights', [])
@@ -30,8 +33,10 @@ class SceneInfo(object):
         self.children.append(child)
 
     def getMap(self):
-        return { 'root' : self.name,
-            'children' : list(child.getMap() for child in self.children) }
+        return {
+            'root' : self.name,
+            'children' : list(child.getMap() for child in self.children)
+        }
 
     def load(self, loader, parent):
         so = loader.load_model(self.filename)
@@ -44,7 +49,7 @@ class SceneInfo(object):
         return so
 
     def __str__(self):
-        return '< SceneInfo for "%s" - "%s" >' % ( self.name, self.filename )
+        return '< SceneInfo for "%s" - "%s" >' % (self.name, self.filename)
 
     def __repr__(self):
         return self.__str__()
@@ -58,6 +63,7 @@ class ControlMap(object):
     key      = None
     callback = None
     args     = None
+
     def __init__(self, name, key, callback, args=None):
         super().__init__()
         self.name     = name
@@ -71,10 +77,14 @@ class Scene(SceneInfo):
     adj_pitch = 0.0
 
     _camera = None
+
     @property
-    def camera(self): return self._camera
+    def camera(self):
+        return self._camera
+
     @camera.setter
-    def camera(self, camera): self._camera = camera
+    def camera(self, camera):
+        self._camera = camera
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

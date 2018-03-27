@@ -40,6 +40,9 @@ setup(
         'Flask-WTF>=0.12',
         'Flask-Login>=0.4',
         'flask-nav>=0.6',
+        'requests>=2.18',
+        'Flask-Cache>=0.13.1',
+        'pyperclip>=1.6.0',
     ],
     entry_points      = {
         'console_scripts': [

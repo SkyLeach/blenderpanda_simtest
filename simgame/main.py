@@ -1,66 +1,38 @@
 #!/usr/bin/env python3
+''' Main hook for game module '''
 import sys
 import os
 from math import pi, sin, cos
 import pprint
 import logging
-logger = logging.getLogger(__name__)
 import traceback
 from optparse import OptionParser
 import atexit
-
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import *
-
-#local imports
+from panda3d.core import load_prc_file, load_prc_file_data, \
+    ConfigVariableManager
+from direct.task import Task
+# local imports
 import blenderpanda
-
-from simpleconsole import ConsoleWindow
-from version import VersionInfo
-    #want-directtools true
-    #want-tk true
-
-load_prc_file_data("", """
-    want-directtools true
-    notify-level-lui info
-    text-minfilter linear
-    text-magfilter linear
-    text-pixels-per-unit 32
-    sync-video #f
-    textures-power-2 none
-    show-frame-rate-meter #t
-    win-size 1920 1080
-    window-title S.I.M.
-    win-fixed-size #f
-    framebuffer-multisample 1
-    multisamples 8
-""")
-
-# test panda_LUI
-# -- fix LUI --from Builtin.LUISkin import LUIDefaultSkin
-# -- fix LUI --from Builtin.LUIFrame import LUIFrame
-# -- fix LUI --from Builtin.LUILabel import LUILabel
-# -- fix LUI --from Builtin.LUIInputField import LUIInputField
-# -- fix LUI --from Builtin.LUIFormattedLabel import LUIFormattedLabel
-# -- fix LUI --from Builtin.LUIScrollableRegion import LUIScrollableRegion
-# -- fix LUI --from Builtin.LUIObject import LUIObject
-# -- fix LUI --from Builtin.LUIRegion import LUIRegion
-# -- fix LUI --from Builtin.LUIInputHandler import LUIInputHandler
-# -- fix LUI --from Builtin.LUIVerticalLayout import LUIVerticalLayout
-# -- fix LUI --from Skins.Metro.LUIMetroSkin import LUIMetroSkin
-
-#from scene import * # SceneInfo, Scene, SceneObject
 import scenes
 import queue
 from scenes.scene import Background
+from simpleconsole import ConsoleWindow
+from version import VersionInfo
 
-#local imports
-#from InteractiveConsole import pandaConsole, INPUT_CONSOLE, INPUT_GUI, OUTPUT_PYTHON, OUTPUT_IRC
+
+logger = logging.getLogger(__name__)
+# from scene import * # SceneInfo, Scene, SceneObject
+# local imports
+# from InteractiveConsole import pandaConsole, INPUT_CONSOLE, INPUT_GUI,
+# OUTPUT_PYTHON, OUTPUT_IRC
+
 
 class DevUIUpdate(object):
     name = None
     widget = None
-    def __init__(self, *args, *kwargs):
+
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
 
@@ -70,21 +42,19 @@ class SIMGame(ShowBase):
     # The currently selected scene
     current_scene = None
     # The scene to use on startup
-    start_scene   = 'corvette'
-# - surfdog -     surfdog       = None
-# -cannon-     cannon        = None
-    console       = None
-
-    horizon       = None #current active horizon name
-
+    # - surfdog -     surfdog       = None
+    # -cannon-     cannon        = None
+    start_scene       = 'corvette'
+    console           = None
+    horizon           = None  # current active horizon name
     registered_scenes = {}
     horizons          = {}
     loaded_obs        = {}
     cvMgr             = None
     _dt_enabled       = False
     _dttk_enabled     = False
-
     _remoteui_updates = queue.Queue()
+
     @property
     def updates(self):
         """updates
@@ -92,18 +62,18 @@ class SIMGame(ShowBase):
         """
         action_items = []
         while not self._remoteui_updates.empty():
-            action_items.append(self._remoteui_updates.popleft()
+            action_items.append(self._remoteui_updates.popleft())
         return action_items
 
-    def add_remoteui_update(self, UpdateClass):
-
+    def add_remoteui_update(self, update_class):
+        pass
 
     def load_registered_scenes(self):
-        for (name,scene) in self.registered_scenes.items():
+        for (name, scene) in self.registered_scenes.items():
             self.load_scene(sceneinfo=scene)
-            #self.loaded_obs[name] = \
+            # self.loaded_obs[name] = \
             #    scene.load(self.loader, self.render)
-            #for part in self.loaded_obs[name].:
+            # for part in self.loaded_obs[name].:
             #    logger.debug('Scene obj {} loaded...'.format(part))
             if not self.current_scene and name == self.start_scene:
                 # set current scene handle
@@ -112,25 +82,31 @@ class SIMGame(ShowBase):
                 self.current_scene.register_camera(self.camera)
                 # register any tasks in the scene
                 self.current_scene.register_tasks(self.taskMgr)
-                #logger.debug(pprint.pformat(dir(self.loaded_obs[name])))
+                # logger.debug(pprint.pformat(dir(self.loaded_obs[name])))
             else:
                 self.loaded_obs[name].hide()
-                #scene.hide()
-            #this is redundant?
-            #self.loaded_obs[name].wrtReparentTo(self.render)
-            #hand off the nodetree to the scene so it can set itself up
+                # scene.hide()
+            # this is redundant?
+            # self.loaded_obs[name].wrtReparentTo(self.render)
+            # hand off the nodetree to the scene so it can set itself up
             scene.setup(self.loaded_obs[name])
 
     def set_scene(self, name=None, sceneinfo=None, scene=None):
         if not scene:
             try:
                 self.load_scene(name=name, sceneinfo=sceneinfo)
-            except:
-                logger.warn('set_scene: nothing to work on')
+            except Exception as e:
+                logger.warn('Problem loading scene.')
+                if logger.isEnabledFor(logging.DEBUG):
+                    logger.debug('Exception loading scene:')
+                    traceback.print_exc()
+                logger.warn('set_scene: nothing to work on for {}/{}'.format(
+                    pprint.pformat(name), pprint.pformat(sceneinfo)))
                 return False
         self.current_scene.hide()
         self.current_scene = scene
         self.current_scene.show()
+        self.current_scene.controlmapIter()
         self.setControls()
         return True
 
@@ -148,8 +124,9 @@ class SIMGame(ShowBase):
                     logger.debug('Scenegraph:')
                     logger.debug('    {}'.format(pprint.pformat(
                         self.loaded_obs[name].ls())))
-                    #lights only
+                    # lights only
                     logger.debug('Scenegraph Lights')
+                    logger.warn('testme')
                     logger.debug('    {}'.format(
                         pprint.pformat([ name for name in self.loaded_obs[name].ls() if
                         name.lower.find('light')])))
@@ -195,6 +172,12 @@ class SIMGame(ShowBase):
             traceback.print_exc()
             logger.warn('No horizon with name "%s" registered.' % (name))
 
+    def killRestServer(self):
+        """killRestServer
+        kill spawned flask thread containing REST api
+        """
+        pass
+
     def __init__(self):
         self.cvMgr = ConfigVariableManager.getGlobalPtr()
         load_prc_file_data('', 'textures-power-2 none')
@@ -227,7 +210,7 @@ class SIMGame(ShowBase):
         self.setControls()
         self.render.set_shader_auto()
         atexit.register(self.killRestServer)
-        #big mesh test with point light
+        # big mesh test with point light
         # light
 #         plight = PointLight('plight')
 #         plight.setColor(VBase4(0.2, 0.2, 0.2, 1))
@@ -286,7 +269,7 @@ class SIMGame(ShowBase):
 #        )
 
         # ----- LUI test code. -----
-        #base.win.set_clear_color(Vec4(0.1, 0.0, 0.0, 1))
+        # base.win.set_clear_color(Vec4(0.1, 0.0, 0.0, 1))
 # -- fix LUI --        self.skin = LUIDefaultSkin()
 # -- fix LUI --        self.skin.load()
 # -- fix LUI --
@@ -323,32 +306,35 @@ class SIMGame(ShowBase):
 # -- fix LUI --                "/test"]:
 # -- fix LUI --            self.input_field.trigger_event("enter", demo_command)
 
-    def send_command(self, event):
-        """ Called when the user presses enter in the input field, submits the
-        command and prints something on the console """
-        label = LUIFormattedLabel()
-        color = (0.9, 0.9, 0.9, 1.0)
-        if event.message.startswith("/"):
-            color = (0.35, 0.65, 0.24, 1.0)
-        label.add(text=">>>  ", color=(0.35, 0.65, 0.24, 1.0))
-        label.add(text=event.message, color=color)
-        self.layout.add(label)
-
-        result = LUIFormattedLabel()
-        if sys.version_info[0]==3 and sys.version_info[1]>2:
-            import codecs
-            result.add("Your command in rot13: " + codecs.encode(event.message, "rot13"), color=(0.4, 0.4, 0.4, 1.0))
-        else:
-            result.add("Your command in rot13: " + event.message.encode("rot13"), color=(0.4, 0.4, 0.4, 1.0))
-        self.layout.add(result)
-        self.input_field.clear()
-
-        self.text_container.scroll_to_bottom()
+# -- fix LUI --     def send_command(self, event):
+# -- fix LUI --         """ Called when the user presses enter in the input field, submits the
+# -- fix LUI --         command and prints something on the console """
+# -- fix LUI --         label = LUIFormattedLabel()
+# -- fix LUI --         color = (0.9, 0.9, 0.9, 1.0)
+# -- fix LUI --         if event.message.startswith("/"):
+# -- fix LUI --             color = (0.35, 0.65, 0.24, 1.0)
+# -- fix LUI --         label.add(text=">>>  ", color=(0.35, 0.65, 0.24, 1.0))
+# -- fix LUI --         label.add(text=event.message, color=color)
+# -- fix LUI --         self.layout.add(label)
+# -- fix LUI -- 
+# -- fix LUI --         result = LUIFormattedLabel()
+# -- fix LUI --         if sys.version_info[0]==3 and sys.version_info[1]>2:
+# -- fix LUI --             import codecs
+# -- fix LUI --             result.add("Your command in rot13: " + codecs.encode(event.message, "rot13"), color=(0.4, 0.4, 0.4, 1.0))
+# -- fix LUI --         else:
+# -- fix LUI --             result.add("Your command in rot13: " + event.message.encode("rot13"), color=(0.4, 0.4, 0.4, 1.0))
+# -- fix LUI --         self.layout.add(result)
+# -- fix LUI --         self.input_field.clear()
+# -- fix LUI -- 
+# -- fix LUI --         self.text_container.scroll_to_bottom()
 
 
     def toggleConsole(self):
-        #unset all controls but console
+        # unset all controls but console
         self.ignoreAll()
+        # I'm not 100% sure where base is set, I think it's a global in the
+        # panda3d Threading wrapper around the cpp
+        global base
         base.camLens.setFocalLength(5)
         self.console.toggleConsole()
 
@@ -361,7 +347,6 @@ class SIMGame(ShowBase):
         # exit game
         self.accept("escape", sys.exit)
         # load current scene controls
-
 
     def setControls(self, console=False):
         """setControls
@@ -435,12 +420,12 @@ class SIMGame(ShowBase):
 
     def toggle_debug_tools(self):
         if self._dt_enabled:
-            loadPrcFileData("", "want-directtools true")
-            loadPrcFileData("", "want-tk true")
+            load_prc_file_data("", "want-directtools true")
+            load_prc_file_data("", "want-tk true")
             self._dt_enabled = False
         else:
-            loadPrcFileData("", "want-directtools false")
-            loadPrcFileData("", "want-tk false")
+            load_prc_file_data("", "want-directtools false")
+            load_prc_file_data("", "want-tk false")
             self._dt_enabled = True
 
 def parseArgs(argv=None):
@@ -486,8 +471,27 @@ def parseArgs(argv=None):
     rval.extend(parser.parse_args(argv))
     return rval
 
+
 if __name__ == '__main__':
-    (parser,opts,args) = parseArgs(sys.argv)
+        # try not loading immediately
+        # want-directtools true
+        # looks like we'll have to reset the display/render engine in
+        # order to get that thing to take effect.
+    load_prc_file_data("", """
+        notify-level-lui info
+        text-minfilter linear
+        text-magfilter linear
+        text-pixels-per-unit 32
+        sync-video #f
+        textures-power-2 none
+        show-frame-rate-meter #t
+        win-size 1920 1080
+        window-title S.I.M.
+        win-fixed-size #f
+        framebuffer-multisample 1
+        multisamples 8
+    """)
+    (parser, opts, args) = parseArgs(sys.argv)
     if opts.debug:
         logging.basicConfig(level=logging.DEBUG)
         logger.debug(pprint.pformat(opts))
@@ -502,17 +506,17 @@ if __name__ == '__main__':
     game = SIMGame()
     if opts.configdump:
         logger.debug(
-                '**************** Available Config Vars ****************')
+            '**************** Available Config Vars ****************')
         logger.debug(pprint.pformat(game.cvMgr.getVariables()))
         logger.debug(
-                '**************** Finito Config ************************')
+            '**************** Finito Config ************************')
         sys.exit()
     if opts.saveconfigdump:
         with open('game.cfg', 'w') as cfgfile:
             cfgfile.writelines([str(v) for v in game.cvMgr.getVariables()])
-        print(cpMgr)
+        pprint.pprint(game.cvMgr)
         sys.exit()
-#     loadPrcFileData("", "want-directtools #t")
+#     load_prc_file_data("", "want-directtools #t")
     if opts.directtools:
         game.toggle_debug_tools()
     game.run()
