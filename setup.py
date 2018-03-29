@@ -27,6 +27,7 @@ setup(
     setup_requires   = ['py2app'],
     packages         = find_packages(),
     install_requires = [
+        # do what needs to be done to include a latex environment
         'numpy>=1.14.1',
         'panda3d>=1.10.0',
         'Pmw>=2.0.1',

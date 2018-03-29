@@ -1,0 +1,132 @@
+{
+    "compilerOptions": {
+        "module": "simgame",
+        "noImplicitAny": true,
+        "removeComments": false,
+        "preserveConstEnums": true,
+        "outFile": "../../built/local/tsc.js",
+        "sourceMap": true
+    },
+    "include": [
+        "**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+        "**/*.pyc",
+        "Library",
+        "build",
+        "dist",
+        "__pycache__",
+        "assets",
+        "blender_scenes"
+    ],
+    "configSchema": {
+        "pylsPath": {
+            "title": "Python Language Server Path",
+            "order": 1,
+            "type": "string",
+            "default": "pyls",
+            "description": "Absolute path to `pyls` executable."
+        },
+        "pylsConfigurationSources": {
+            "type": "array",
+            "default": [
+                "flake8"
+            ],
+            "description": "List of configuration sources to use. Requires `pyls` 0.12.1+",
+            "items": {
+                "type": "string",
+                "enum": [
+                    "pycodestyle",
+                    "flake8"
+                ]
+            }
+        },
+        "pylsPlugins": {
+            "title": "Python Language Server Plugins",
+            "type": "object",
+            "properties": {
+                "jedi_completion": {
+                    "title": "Jedi Completion",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "type": "boolean",
+                            "default": true,
+                            "description": "Enable or disable Jedi Completion."
+                        }
+                    }
+                },
+                "jedi_definition": {
+                    "title": "Jedi Definition",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "type": "boolean",
+                            "default": true,
+                            "description": "Enable or disable Jedi Definition."
+                        }
+                    }
+                },
+                "jedi_hover": {
+                    "title": "Jedi Hover",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "type": "boolean",
+                            "default": true,
+                            "description": "Enable or disable Jedi Hover."
+                        }
+                    }
+                },
+                "jedi_references": {
+                    "title": "Jedi References",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "type": "boolean",
+                            "default": true,
+                            "description": "Enable or disable Jedi References."
+                        }
+                    }
+                },
+                "jedi_signature_help": {
+                    "title": "Jedi Signature Help",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "type": "boolean",
+                            "default": true,
+                            "description": "Enable or disable Jedi Signature Help."
+                        }
+                    }
+                },
+                "jedi_symbols": {
+                    "title": "Jedi Symbols",
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "title": "Enabled",
+                            "type": "boolean",
+                            "order": 1,
+                            "default": true,
+                            "description": "Enable or disable Jedi Symbols."
+                        },
+                        "all_scopes": {
+                            "title": "All Scopes",
+                            "type": "boolean",
+                            "default": true,
+                            "description": "If enabled lists the names of all scopes instead of only the module namespace. Requires `pyls` 0.7.0+"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

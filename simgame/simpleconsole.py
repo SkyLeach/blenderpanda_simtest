@@ -62,8 +62,6 @@ PANDA3D_CONSOLE_VERTICAL_POS     = 0.05
 PANDA3D_CONSOLE_VERTICAL_SIZE    = 1.9
 # to change the alignment of the console
 # look into the panda3d.py def windowEvent
-
-
 # --- things after this line should not be changed ---
 
 # some constants

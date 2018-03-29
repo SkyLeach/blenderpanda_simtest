@@ -37,21 +37,21 @@ class DevUIUpdate(object):
 
 class SIMGame(ShowBase):
 
-    wiresky       = False
+    wiresky = False
     # The currently selected scene
     current_scene = None
     # The scene to use on startup
     # - surfdog -     surfdog       = None
     # -cannon-     cannon        = None
-    start_scene       = 'corvette'
-    console           = None
-    horizon           = None  # current active horizon name
+    start_scene = 'corvette'
+    console = None
+    horizon = None  # current active horizon name
     registered_scenes = {}
-    horizons          = {}
-    loaded_obs        = {}
-    cvMgr             = None
-    _dt_enabled       = False
-    _dttk_enabled     = False
+    horizons = {}
+    loaded_obs = {}
+    cvMgr = None
+    _dt_enabled = False
+    _dttk_enabled = False
     _remoteui_updates = queue.Queue()
 
     @property
@@ -334,7 +334,6 @@ class SIMGame(ShowBase):
 # -- fix LUI --
 # -- fix LUI --         self.text_container.scroll_to_bottom()
 
-
     def toggleConsole(self):
         # unset all controls but console
         self.ignoreAll()
@@ -347,7 +346,7 @@ class SIMGame(ShowBase):
             logger.debug('Enabling debug controls')
             self.accept("s", self.swap_horizon)
             self.accept("w", self.toggle_sky_wireframe)
-        self.accept( self.console.gui_key, self.console.toggleConsole )
+        self.accept(self.console.gui_key, self.console.toggleConsole)
         # exit game
         self.accept("escape", sys.exit)
         # load current scene controls
@@ -369,7 +368,7 @@ class SIMGame(ShowBase):
         else:
             self.ignoreAll()
             self.setGlobalControls()
-            for (name,control) in self.current_scene.controlmapIter():
+            for (name, control) in self.current_scene.controlmapIter():
                 self.accept(control.key, control.callback, control.args)
 
     def toggle_sky_wireframe(self):
@@ -404,7 +403,7 @@ class SIMGame(ShowBase):
         else:
             self.horizon = 'skybox'
 
-        if not self.horizon in self.loaded_obs:
+        if self.horizon not in self.loaded_obs:
             self.loaded_obs[self.horizon] = self.load_horizon(self.horizon)
         else:
             self.loaded_obs[self.horizon].show()
@@ -433,44 +432,48 @@ class SIMGame(ShowBase):
             load_prc_file_data("", "want-tk false")
             self._dt_enabled = True
 
+
 def parseArgs(argv=None):
     usage = "%prog [OPTIONS]"
     parser = OptionParser(usage=usage)
 
     parser.add_option("--threading",
-        action="store_true",
-        help="Enable threaded and multiprocess code")
+                      action="store_true",
+                      help="Enable threaded and multiprocess code")
 
     parser.add_option("--debug",
-        action="store_true",
-        help="Enable debug mode. Implies --verbose.")
+                      action="store_true",
+                      help="Enable debug mode. Implies --verbose.")
 
     parser.add_option("--verbose",
-        action="store_true",
-        help="Enable verbose mode.  Redundant if --debug is set.")
+                      action="store_true",
+                      help="Enable verbose mode.  Redundant if --debug is set.")
 
     parser.add_option("--log",
-        help="Write DEBUG (if set), INFO, WARN and ERR output to file specified", metavar="FILE")
+                      help="Write DEBUG (if set), INFO, WARN and ERR output" +
+                      " to file specified", metavar="FILE")
 
     parser.add_option("--out",
-        help="Write ALL output to file specified", metavar="FILE")
+                      help="Write ALL output to file specified", metavar="FILE")
 
     parser.add_option("--config",
-        help="Use configuration from FILE", metavar="FILE")
+                      help="Use configuration from FILE", metavar="FILE")
 
     parser.add_option("--dump-config", action="store_true",
-        dest='configdump',
-        help="List all configuration options and default values then exit.")
+                      dest='configdump',
+                      help="List all configuration options and default values" +
+                      "then exit.")
 
     parser.add_option("--make-config-file", action="store_true",
-        dest='saveconfigdump',
-        help="Load the game, save the current config, then exit.")
+                      dest='saveconfigdump',
+                      help="Load the game, save the current config, then exit.")
 
     parser.add_option("--version", action="store_true",
-        help="Print version and exit. Note: Version is always printed.")
+                      help="Print version and exit. Note: Version is always" +
+                      " printed.")
 
     parser.add_option('--directtools', action='store_true',
-        help="Enable directtools panda3d dev interface.")
+                      help="Enable directtools panda3d dev interface.")
 
     rval = [parser]
     rval.extend(parser.parse_args(argv))
